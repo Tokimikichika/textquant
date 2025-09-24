@@ -1,0 +1,5 @@
+﻿The quick brown fox jumps over the lazy dog. This is a test sentence. Another sentence for testing purposes.
+
+This is a new paragraph with multiple sentences. It contains various words and punctuation marks! The fox is very quick and the dog is quite lazy.
+
+One more paragraph to test our text analyzer. It should count words, sentences, and paragraphs correctly. The analyzer will also find the most frequent words in the text.
