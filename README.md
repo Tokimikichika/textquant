@@ -13,8 +13,26 @@ composer require tokimikichika/find
 ## Использование
 ```php
 use Tokimikichika\Find\TextAnalyzer;
+use Tokimikichika\Find\WordCounter;
+use Tokimikichika\Find\CharacterCounter;
+use Tokimikichika\Find\SentenceCounter;
+use Tokimikichika\Find\ParagraphCounter;
+use Tokimikichika\Find\TopWordAnalyzer;
 
-$analyzer = new TextAnalyzer();
+$wordCounter = new WordCounter();
+$characterCounter = new CharacterCounter();
+$sentenceCounter = new SentenceCounter();
+$paragraphCounter = new ParagraphCounter();
+$topWordAnalyzer = new TopWordAnalyzer();
+
+$analyzer = new TextAnalyzer(
+    $wordCounter,
+    $characterCounter,
+    $sentenceCounter,
+    $paragraphCounter,
+    $topWordAnalyzer
+);
+
 $results = $analyzer->analyze("Hello world!", "text");
 ```
 
@@ -39,14 +57,39 @@ Top 5 words: hello (1), world (1)
 ```
 
 ## Тестирование
-```bash
-# Запуск всех тестов
-php tests/TextAnalyzerTest.php
-php bin/analyze.php --file="tests/test.txt"
 
-# Или через Composer
+### Запуск простых тестов
+```bash
+# Запуск базовых тестов
 composer test
+# или
+php tests/TextAnalyzerTest.php
 ```
+
+### Запуск юнит-тестов с PHPUnit
+```bash
+# Запуск всех юнит-тестов
+composer test-unit
+# или
+./vendor/bin/phpunit
+
+# Запуск с покрытием кода
+composer test-coverage
+# или
+./vendor/bin/phpunit --coverage-html coverage
+
+# Запуск конкретного теста
+./vendor/bin/phpunit tests/Unit/WordCounterTest.php
+```
+
+### Тестирование с примером файла
+```bash
+# Анализ тестового файла
+php bin/analyze.php --file="tests/test.txt"
+```
+
+Файл `tests/test.txt` содержит пример текста для демонстрации работы библиотеки.
+
 
 ## Структура классов
 - `TextAnalyzer` - главный класс для анализа
