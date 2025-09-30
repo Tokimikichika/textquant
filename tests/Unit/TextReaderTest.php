@@ -5,6 +5,9 @@ namespace Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Tokimikichika\Find\TextReader;
 
+/**
+ * @group text-reader
+ */
 class TextReaderTest extends TestCase
 {
     private TextReader $textReader;
@@ -14,22 +17,34 @@ class TextReaderTest extends TestCase
         $this->textReader = new TextReader();
     }
 
-    public function testValidateFile(): void
+    public function testValidateFileExistingFile(): void
     {
-        $this->assertTrue($this->textReader->validateFile(__FILE__));
-        $this->assertFalse($this->textReader->validateFile('nonexistent.txt'));
+        $result = $this->textReader->validateFile(__FILE__);
+        $this->assertTrue($result);
     }
 
-    public function testReadFromFile(): void
+    public function testValidateFileNonExistentFile(): void
     {
-        $content = $this->textReader->readFromFile(__FILE__);
-        $this->assertStringContainsString('<?php', $content);
+        $result = $this->textReader->validateFile('nonexistent.txt');
+        $this->assertFalse($result);
     }
 
-    public function testReadFromFileThrowsException(): void
+    public function testReadFromFileExistingFile(): void
+    {
+        $result = $this->textReader->readFromFile(__FILE__);
+        $this->assertStringContainsString('<?php', $result);
+    }
+
+    public function testReadFromFileThrowsExceptionForNonExistentFile(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->textReader->readFromFile('nonexistent.txt');
+    }
+
+    public function testReadFromFileThrowsExceptionForDirectory(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->textReader->readFromFile(__DIR__);
     }
 }
 

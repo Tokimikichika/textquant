@@ -4,13 +4,13 @@ namespace Tokimikichika\Find;
 
 /**
  * Класс для подсчета слов в тексте
- *
+ * 
  */
 class WordCounter
 {
     /**
      * Подсчитывает количество слов в тексте
-     *
+     * 
      * @param string $text Исходный текст для анализа
      * @return int Количество слов
      */
@@ -21,13 +21,13 @@ class WordCounter
 
     /**
      * Извлекает список слов из текста
-     *
+     * 
      * @param string $text Исходный текст для анализа
      * @return array Массив очищенных слов
      */
     public function getWords(string $text): array
     {
-        $words = preg_split('/\s+/', strtolower($text));
+        $words = preg_split('/[\s,;:]+/', strtolower($text));
         
         // Очищаем каждое слово от знаков препинания
         $cleanWords = array_map(function($word) {
@@ -42,7 +42,7 @@ class WordCounter
 
     /**
      * Вычисляет среднюю длину слова в тексте
-     *
+     * 
      * @param string $text Исходный текст для анализа
      * @return float Средняя длина слова
      */
