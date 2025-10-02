@@ -27,14 +27,12 @@ class WordCounter
      */
     public function getWords(string $text): array
     {
-        $words = preg_split('/[\s,;:]+/', strtolower($text));
+        $words = preg_split('/[\s,;:]+/u', mb_strtolower($text, 'UTF-8'));
         
-        // Очищаем каждое слово от знаков препинания
         $cleanWords = array_map(function($word) {
-            return preg_replace('/[^a-zA-Zа-яА-Я0-9]/', '', $word);
+            return preg_replace('/[^\p{L}\p{N}]/u', '', $word);
         }, $words);
         
-        // Фильтруем пустые слова
         return array_filter($cleanWords, function($cleanWord) {
             return !empty($cleanWord);
         });
@@ -54,7 +52,7 @@ class WordCounter
         }
         $totalLength = 0;
         foreach ($words as $word) {
-            $totalLength += strlen($word);
+            $totalLength += mb_strlen($word, 'UTF-8');
         }
         return round($totalLength / count($words), 1);
     }

@@ -10,7 +10,26 @@
 composer require tokimikichika/find
 ```
 
+## Запуск проекта
+
+### Веб-интерфейс
+```bash
+# Запуск встроенного PHP сервера
+php -S localhost:8080
+
+# Откройте в браузере
+http://localhost:8080
+```
+
 ## Использование
+
+### Веб-интерфейс
+1. Запустите сервер: `php -S localhost:8080`
+2. Откройте http://localhost:8080 в браузере
+3. Введите текст или загрузите .txt файл
+4. Нажмите "Анализировать текст"
+
+### Программное использование
 ```php
 use Tokimikichika\Find\TextAnalyzer;
 use Tokimikichika\Find\WordCounter;
