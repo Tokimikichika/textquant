@@ -11,15 +11,18 @@ class WebController
     private TextAnalyzer $analyzer;
     private TextReader $textReader;
     private ResultFormatter $formatter;
+    private ViewRenderer $viewRenderer;
 
     public function __construct(
         TextAnalyzer $analyzer,
         TextReader $textReader,
-        ResultFormatter $formatter
+        ResultFormatter $formatter,
+        ViewRenderer $viewRenderer
     ) {
         $this->analyzer = $analyzer;
         $this->textReader = $textReader;
         $this->formatter = $formatter;
+        $this->viewRenderer = $viewRenderer;
     }
 
     /**
@@ -49,6 +52,14 @@ class WebController
             'error' => $error,
             'results' => $results
         ];
+    }
+
+    /**
+     * Рендерит HTML ответ
+     */
+    public function renderResponse(array $data): string
+    {
+        return $this->viewRenderer->renderWithLayout('home.php', $data);
     }
 
     /**
