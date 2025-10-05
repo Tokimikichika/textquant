@@ -1,7 +1,7 @@
 <h1>Анализатор текста</h1>
 <p>Загрузите текстовый файл или введите текст для анализа</p>
 
-<form method="POST" enctype="multipart/form-data">
+<form method="POST" enctype="multipart/form-data" id="analyzeForm">
     <div class="form-group">
         <label for="text">Введите текст для анализа:</label>
         <textarea name="text" id="text" placeholder="Введите ваш текст здесь..."><?= htmlspecialchars($data['text'] ?? '') ?></textarea>
@@ -21,7 +21,7 @@
     </div>
 <?php endif; ?>
 
-<?php if ($data['results']): ?>
+<?php if (isset($data['results']) && $data['results']): ?>
     <div class="results">
         <h2>Результаты анализа</h2>
         
@@ -69,3 +69,14 @@
         <pre><?= htmlspecialchars($formatter->formatResults($data['results'])) ?></pre>
     </div>
 <?php endif; ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('analyzeForm');
+    const textarea = document.getElementById('text');
+    
+    <?php if (isset($data['results']) && $data['results']): ?>
+        textarea.value = '';
+    <?php endif; ?>
+});
+</script>

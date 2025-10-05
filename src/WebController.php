@@ -46,12 +46,15 @@ class WebController
             $results = $this->analyzeText($text, $source, $error);
         }
 
-        return [
+        $data = [
             'text' => $text,
             'source' => $source,
             'error' => $error,
             'results' => $results
         ];
+
+        error_log("WebController: Returning data: " . json_encode($data));
+        return $data;
     }
 
     /**

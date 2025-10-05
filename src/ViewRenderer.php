@@ -10,7 +10,7 @@ class ViewRenderer
 {
     private string $templatesPath;
 
-    public function __construct(string $templatesPath = 'templates')
+    public function __construct(string $templatesPath = __DIR__ . '/../templates')
     {
         $this->templatesPath = rtrim($templatesPath, '/');
     }
@@ -20,7 +20,7 @@ class ViewRenderer
      */
     public function render(string $template, array $data = []): string
     {
-        $templatePath = $this->templatesPath . '/' . $template;
+        $templatePath = $this->templatesPath . '/' . $template . '.php';
         
         if (!file_exists($templatePath)) {
             throw new \RuntimeException("Шаблон не найден: {$template}");
