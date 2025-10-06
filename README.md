@@ -12,20 +12,25 @@ composer require tokimikichika/find
 
 ## Запуск проекта
 
-### Веб-интерфейс
+### Установка Slim
 ```bash
-# Запуск встроенного PHP сервера
-php -S localhost:8080
+composer require slim/slim:^4.12 slim/psr7:^1.6
+```
+
+### Веб-интерфейс (через Slim)
+```bash
+# Запустите встроенный сервер с document root на public/
+php -S localhost:8080 -t public
 
 # Откройте в браузере
-http://localhost:8080
+http://localhost:8080/
 ```
 
 ## Использование
 
 ### Веб-интерфейс
-1. Запустите сервер: `php -S localhost:8080`
-2. Откройте http://localhost:8080/index.php в браузере
+1. Запустите сервер: `php -S localhost:8080 -t public`
+2. Откройте http://localhost:8080 в браузере
 3. Введите текст или загрузите .txt файл
 4. Нажмите "Анализировать текст"
 
