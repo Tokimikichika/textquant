@@ -113,13 +113,13 @@ class WebController
     }
 
     /**
-     * Анализирует текст
+     * Безопасный вызов анализатора с обработкой ошибок
      */
-    private function analyzeText(string $text, string $source, string &$error): ?array
+    private function analyzeSafely(string $text, string $source, string &$error): ?array
     {
         try {
             return $this->analyzer->analyze($text, $source);
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             $error = 'Ошибка анализа: ' . $e->getMessage();
             return null;
         }
