@@ -102,5 +102,15 @@ class WebController
             return null;
         }
     }
+
+    /**
+     * Рендер HTML в Response
+     */
+    private function renderHtml(Response $response, array $data): Response
+    {
+        $html = $this->viewRenderer->renderWithLayout('home', $data);
+        $response->getBody()->write($html);
+        return $response;
+    }
 }
 
