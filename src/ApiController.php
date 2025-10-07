@@ -17,7 +17,25 @@ class ApiController
         $this->analyzer = $analyzer;
     }
 
+    /**
+     * Анализирует текст
+     */
+    public function analyzeText(Request $request, Response $response): Response
+    {
+        $body = (array) ($request->getParsedBody() ?? []);
+        $text = trim((string) ($body['text'] ?? ''));
 
+        if ($text === '') {
+            return $this->json($response, ['error' => 'Text is required'], 400);
+        }
+
+        try {
+            $results = $this->analyzer->analyze($text, 'text');
+            return $this->json($response, $results, 200);
+        } catch (\Throwable $e) {
+            return $this->json($response, ['error' => 'Internal error', 'details' => $e->getMessage()], 500);
+        }
+    }
 
     /**
      * Форматирует данные в JSON
