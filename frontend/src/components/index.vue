@@ -15,12 +15,22 @@ export default {
       this.result = null;
       this.loading = true;
       try {
+        const payloadText = (this.text || '').trim();
+        if (!payloadText) {
+          this.error = 'Введите текст';
+          return;
+        }
         const res = await fetch('/api/v1/analyze/text', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: this.text })
+          body: JSON.stringify({ text: payloadText })
         });
-        const json = await res.json();
+        let json;
+        try {
+          json = await res.json();
+        } catch {
+          throw new Error('Некорректный ответ сервера');
+        }
         if (!res.ok) throw new Error(json.error || 'Request failed');
         this.result = json;
       } catch (e) {
@@ -37,8 +47,8 @@ export default {
   <main class="container">
     <h1>Текстовый анализатор (Vue + API)</h1>
     <form @submit.prevent="analyze" class="form">
-      <textarea v-model="text" rows="6" placeholder="Введите текст..." />
-      <button type="submit" :disabled="loading">{{ loading ? 'Анализ...' : 'Анализировать' }}</button>
+      <textarea v-model="text" rows="6" placeholder="Введите текст..."></textarea>
+      <button type="submit" :disabled="loading || !(text && text.trim())">{{ loading ? 'Анализ...' : 'Анализировать' }}</button>
     </form>
 
     <p v-if="error" class="error">{{ error }}</p>
