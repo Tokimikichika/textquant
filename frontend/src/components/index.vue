@@ -3,7 +3,7 @@ export default {
   name: 'IndexAnalyzer',
   data() {
     return {
-      text: 'Привет мир! Hello world.',
+      text: '',
       loading: false,
       error: '',
       result: null,
