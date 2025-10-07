@@ -14,9 +14,7 @@ use Tokimikichika\Find\ParagraphCounter;
 use Tokimikichika\Find\TopWordAnalyzer;
 use Tokimikichika\Find\TextAnalyzer;
 use Tokimikichika\Find\TextReader;
-use Tokimikichika\Find\ResultFormatter;
-use Tokimikichika\Find\ViewRenderer;
-use Tokimikichika\Find\WebController;
+use Tokimikichika\Find\ApiController;
 
 $app = AppFactory::create();
 $app->addBodyParsingMiddleware();
@@ -33,12 +31,24 @@ $analyzer = new TextAnalyzer(
 	$paragraphCounter,
 	$topWordAnalyzer
 );
-$formatter = new ResultFormatter();
-$textReader = new TextReader();
-$viewRenderer = new ViewRenderer();
-$controller = new WebController($analyzer, $textReader, $formatter, $viewRenderer);
+$api = new ApiController($analyzer);
 
-$app->get('/', [$controller, 'show']);
-$app->post('/', [$controller, 'analyze']);
+$app->add(function ($request, $handler) {
+    $response = $handler->handle($request);
+    return $response
+        ->withHeader('Access-Control-Allow-Origin', '*')
+        ->withHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
+        ->withHeader('Access-Control-Allow-Headers', 'Content-Type');
+});
+
+$app->options('/{routes:.+}', function ($request, $response) {
+    return $response;
+});
+
+$app->post('/api/v1/analyze/text', [$api, 'analyzeText']);
+
+$app->get('/', function (Request $request, Response $response) {
+    return $response->withHeader('Location', 'http://localhost:6123/')->withStatus(302);
+});
 
 $app->run();
