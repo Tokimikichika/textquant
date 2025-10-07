@@ -38,18 +38,7 @@ $textReader = new TextReader();
 $viewRenderer = new ViewRenderer();
 $controller = new WebController($analyzer, $textReader, $formatter, $viewRenderer);
 
-$app->get('/', function (Request $request, Response $response) use ($controller, $viewRenderer, $formatter) {
-	$data = $controller->handleRequest(); 
-	$html = $viewRenderer->renderWithLayout('home', array_merge($data, ['formatter' => $formatter]));
-	$response->getBody()->write($html);
-	return $response;
-});
-
-$app->post('/', function (Request $request, Response $response) use ($controller, $viewRenderer, $formatter) {
-	$data = $controller->handleRequest();
-	$html = $viewRenderer->renderWithLayout('home', array_merge($data, ['formatter' => $formatter]));
-	$response->getBody()->write($html);
-	return $response;
-});
+$app->get('/', [$controller, 'show']);
+$app->post('/', [$controller, 'analyze']);
 
 $app->run();
