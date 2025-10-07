@@ -46,48 +46,48 @@ class WebController
     }
 
     /**
-     * Обрабатывает анализ текста (POST)
+     * Извлекает и валидирует входные данные из запроса
+     * @return array{0:string,1:string,2:string} [text, source, error]
      */
-    public function renderResponse(array $data): string
+    private function getRequestData(Request $request): array
     {
-        return $this->viewRenderer->renderWithLayout('home.php', $data);
-    }
+        $body = (array) ($request->getParsedBody() ?? []);
+        $uploadedFiles = $request->getUploadedFiles();
 
-    /**
-     * Обрабатывает POST запрос
-     */
-    private function handlePostRequest(string &$text, string &$source, string &$error): void
-    {
-        if (isset($_POST['text']) && !empty(trim($_POST['text']))) {
-            $text = trim($_POST['text']);
+        $text = '';
+        $source = 'text';
+        $error = '';
+
+        $textInput = trim((string) ($body['text'] ?? ''));
+        $file = $uploadedFiles['file'] ?? null;
+
+        $hasText = ($textInput !== '');
+        $hasFile = ($file && $file->getError() === UPLOAD_ERR_OK);
+
+        if ($hasText && $hasFile) {
+            $error = 'Введите текст ИЛИ выберите файл, но не оба сразу';
+            return [$text, $source, $error];
+        }
+
+        if ($hasText) {
+            $text = $textInput;
             $source = 'text';
-        } elseif (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
-            $this->handleFileUpload($text, $source, $error);
-        } else {
-            $error = 'Пожалуйста, введите текст или выберите файл';
+            return [$text, $source, $error];
         }
-    }
 
-    /**
-     * Обрабатывает загрузку файла
-     */
-    private function handleFileUpload(string &$text, string &$source, string &$error): void
-    {
-        try {
-            $text = $this->textReader->readFromFile($_FILES['file']['tmp_name']);
-            $source = $_FILES['file']['name'];
-        } catch (Exception $e) {
-            $error = 'Ошибка чтения файла: ' . $e->getMessage();
+        if ($hasFile) {
+            try {
+                $tmpPath = $file->getStream()->getMetadata('uri');
+                $text = $this->textReader->readFromFile($tmpPath);
+                $source = $file->getClientFilename() ?? 'file';
+            } catch (\Throwable $e) {
+                $error = 'Ошибка чтения файла: ' . $e->getMessage();
+            }
+            return [$text, $source, $error];
         }
-    }
 
-    /**
-     * Обрабатывает GET запрос
-     */
-    private function handleGetRequest(string &$text, string &$source): void
-    {
-        $text = "Привет мир! Это тестовый текст для демонстрации работы библиотеки анализа текста. Он содержит несколько предложений и слов для демонстрации работы библиотеки.";
-        $source = 'example';
+        $error = 'Пожалуйста, введите текст или выберите файл';
+        return [$text, $source, $error];
     }
 
     /**
