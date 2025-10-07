@@ -46,6 +46,28 @@ class WebController
     }
 
     /**
+     * Обрабатывает анализ текста (POST)
+     */
+    public function analyze(Request $request, Response $response): Response
+    {
+        [$text, $source, $error] = $this->getRequestData($request);
+
+        $results = null;
+        if ($error === '' && $text !== '') {
+            $results = $this->analyzeSafely($text, $source, $error);
+        }
+
+        $data = [
+            'text' => $text,
+            'source' => $source,
+            'error' => $error,
+            'results' => $results,
+        ];
+
+        return $this->renderHtml($response, array_merge($data, ['formatter' => $this->formatter]));
+    }
+
+    /**
      * Извлекает и валидирует входные данные из запроса
      * @return array{0:string,1:string,2:string} [text, source, error]
      */
