@@ -2,6 +2,9 @@
 
 namespace Tokimikichika\Find;
 
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+
 /**
  * Контроллер для веб-интерфейса
  * Обрабатывает HTTP запросы и подготавливает данные для представления
@@ -26,39 +29,24 @@ class WebController
     }
 
     /**
-     * Обрабатывает HTTP запрос и возвращает данные для представления
+     * Отображает стартовую страницу (GET)
      */
-    public function handleRequest(): array
+    public function show(Request $request, Response $response): Response
     {
-        $method = $_SERVER['REQUEST_METHOD'];
-        $text = '';
-        $source = 'text';
-        $error = '';
-        $results = null;
-
-        if ($method === 'POST') {
-            $this->handlePostRequest($text, $source, $error);
-        } else {
-            $this->handleGetRequest($text, $source);
-        }
-
-        if (!empty($text) && empty($error)) {
-            $results = $this->analyzeText($text, $source, $error);
-        }
-
         $data = [
-            'text' => $text,
-            'source' => $source,
-            'error' => $error,
-            'results' => $results
+            'text' => '',
+            'source' => 'text',
+            'error' => '',
+            'results' => null,
         ];
 
-        error_log("WebController: Returning data: " . json_encode($data));
-        return $data;
+        $html = $this->viewRenderer->renderWithLayout('home', array_merge($data, ['formatter' => $this->formatter]));
+        $response->getBody()->write($html);
+        return $response;
     }
 
     /**
-     * Рендерит HTML ответ
+     * Обрабатывает анализ текста (POST)
      */
     public function renderResponse(array $data): string
     {
