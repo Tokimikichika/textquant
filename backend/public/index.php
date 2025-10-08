@@ -17,7 +17,6 @@ use Tokimikichika\Find\TextReader;
 use Tokimikichika\Find\ApiController;
 
 $app = AppFactory::create();
-$app->addBodyParsingMiddleware();
 
 $wordCounter = new WordCounter();
 $characterCounter = new CharacterCounter();
@@ -31,20 +30,7 @@ $analyzer = new TextAnalyzer(
 	$paragraphCounter,
 	$topWordAnalyzer
 );
-$api = new ApiController($analyzer);
 
-$app->add(function ($request, $handler) {
-    $response = $handler->handle($request);
-    return $response
-        ->withHeader('Access-Control-Allow-Origin', '*')
-        ->withHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
-        ->withHeader('Access-Control-Allow-Headers', 'Content-Type');
-});
-
-$app->options('/{routes:.+}', function ($request, $response) {
-    return $response;
-});
-
-$app->post('/api/v1/analyze/text', [$api, 'analyzeText']);
+$app->post('/api/v1/analyze/text', [new ApiController($analyzer), 'analyzeText']);
 
 $app->run();
