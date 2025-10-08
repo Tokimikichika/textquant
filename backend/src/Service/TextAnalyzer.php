@@ -2,45 +2,179 @@
 
 namespace Tokimikichika\Find\Service;
 
-use Tokimikichika\Find\WordCounter;
-use Tokimikichika\Find\CharacterCounter;
-use Tokimikichika\Find\SentenceCounter;
-use Tokimikichika\Find\ParagraphCounter;
-use Tokimikichika\Find\TopWordAnalyzer;
-
 /**
- * Координирует работу всех счетчиков для анализа текста
+ * Анализатор текста без внешних зависимостей.
  */
 class TextAnalyzer
 {
-    public function __construct(
-        private WordCounter $wordCounter,
-        private CharacterCounter $characterCounter,
-        private SentenceCounter $sentenceCounter,
-        private ParagraphCounter $paragraphCounter,
-        private TopWordAnalyzer $topWordAnalyzer
-    ) {
+    public function __construct()
+    {
     }
 
     /**
      * Анализ текста
-     *
-     * @param string $text Текст для анализа
-     * @param string $source Источник текста (имя файла или "text")
-     * @return array Результат анализа
      */
     public function analyze(string $text, string $source = 'text'): array
     {
         return [
             'source' => $source,
-            'words' => $this->wordCounter->count($text),
-            'characters' => $this->characterCounter->count($text),
-            'sentences' => $this->sentenceCounter->count($text),
-            'paragraphs' => $this->paragraphCounter->count($text),
-            'avg_word_length' => $this->wordCounter->getAverageLength($text),
-            'avg_sentence_length' => $this->sentenceCounter->getAverageLength($text),
-            'top_words' => $this->topWordAnalyzer->getTopWords($text)
+            'words' => $this->countWords($text),
+            'characters' => $this->countCharacters($text),
+            'sentences' => $this->countSentences($text),
+            'paragraphs' => $this->countParagraphs($text),
+            'avg_word_length' => $this->getAverageWordLength($text),
+            'avg_sentence_length' => $this->getAverageSentenceLength($text),
+            'top_words' => $this->getTopWords($text)
         ];
+    }
+
+    /**
+     * Извлекает список слов из текста
+     * 
+     * @param string $text Исходный текст для анализа
+     * @return array Список слов
+     */
+    private function getWords(string $text): array
+    {
+        $words = preg_split('/[\s,;:]+/u', mb_strtolower($text, 'UTF-8'));
+        
+        $cleanWords = array_map(function($word) {
+            return preg_replace('/[^\p{L}\p{N}]/u', '', $word);
+        }, $words);
+        
+        return array_filter($cleanWords, function($cleanWord) {
+            return !empty($cleanWord);
+        });
+    }
+
+    /**
+     * Подсчитывает количество слов в тексте
+     * 
+     * @param string $text Исходный текст для анализа
+     * @return int Количество слов
+     */
+    private function countWords(string $text): int
+    {
+        return count($this->getWords($text));
+    }
+
+    /**
+     * Подсчитывает количество символов в тексте
+     * 
+     * @param string $text Исходный текст для анализа
+     * @return int Количество символов
+     */
+    private function countCharacters(string $text): int
+    {
+        return mb_strlen($text, 'UTF-8');
+    }
+
+    /**
+     * Извлекает список предложений из текста
+     * 
+     * @param string $text Исходный текст для анализа
+     * @return array Список предложений
+     */
+    private function getSentences(string $text): array
+    {
+        $sentences = preg_split('/[.!?]+/', $text);
+        return array_filter($sentences, function ($sentence) {
+            return !empty(trim($sentence));
+        });
+    }
+
+    /**
+     * Подсчитывает количество предложений в тексте
+     * 
+     * @param string $text Исходный текст для анализа
+     * @return int Количество предложений
+     */
+    private function countSentences(string $text): int
+    {
+        return count($this->getSentences($text));
+    }
+
+    /**
+     * Подсчитывает количество абзацев в тексте
+     * 
+     * @param string $text Исходный текст для анализа
+     * @return int Количество абзацев
+     */
+    private function countParagraphs(string $text): int
+    {
+        $paragraphs = preg_split('/\n\s*\n/', $text);
+        $paragraphs = array_filter($paragraphs, function ($paragraph) {
+            return !empty(trim($paragraph));
+        });
+
+        return count($paragraphs);
+    }
+
+    /**
+     * Вычисляет среднюю длину слова в тексте
+     * 
+     * @param string $text Исходный текст для анализа
+     * @return float Средняя длина слова
+     */
+    private function getAverageWordLength(string $text): float
+    {
+        $words = $this->getWords($text);
+        if (empty($words)) {
+            return 0.0;
+        }
+        $totalLength = 0;
+        foreach ($words as $word) {
+            $totalLength += mb_strlen($word, 'UTF-8');
+        }
+        return round($totalLength / count($words), 1);
+    }
+
+    /**
+     * Вычисляет среднюю длину предложения в тексте
+     * 
+     * @param string $text Исходный текст для анализа
+     * @return float Средняя длина предложения
+     */
+    private function getAverageSentenceLength(string $text): float
+    {
+        $sentences = $this->getSentences($text);
+        if (empty($sentences)) {
+            return 0.0;
+        }
+
+        $wordCounter = new WordCounter();
+        $totalWords = 0;
+        foreach ($sentences as $sentence) {
+            $totalWords += $wordCounter->count($sentence);
+        }
+
+        return round($totalWords / count($sentences), 1);
+    }
+
+    /**
+     * Извлекает список самых частотных слов в тексте
+     * 
+     * @param string $text Исходный текст для анализа
+     * @param int $limit Максимальное количество слов
+     * @return array Список самых частотных слов
+     */
+    private function getTopWords(string $text, int $limit = 5): array
+    {   
+        $wordCounter = new WordCounter();
+        $words = $wordCounter->getWords($text);
+        $wordCounts = array_count_values($words);
+        $sortedWords = arsort($wordCounts);
+        $topWords = [];
+        $count = 0;
+        foreach ($sortedWords as $word => $frequency) {
+            if ($count >= $limit) {
+                break;
+            }
+            $topWords[] = ['word' => $word, 'count' => $frequency];
+            $count++;
+        }
+
+        return $topWords;
     }
 }
 
