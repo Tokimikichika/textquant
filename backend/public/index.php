@@ -8,9 +8,11 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 require __DIR__ . '/../vendor/autoload.php';
 
 use Tokimikichika\Find\Controller\ApiController;
+use Tokimikichika\Find\Service\TextAnalyzer;
 
 $app = AppFactory::create();
 
+$analyzer = new TextAnalyzer();
 $app->post('/api/v1/analyze/text', [new ApiController($analyzer), 'analyzeText']);
 
 $app->run();
