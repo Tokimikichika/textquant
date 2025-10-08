@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use Tokimikichika\Find\ResultFormatter;
+use Tokimikichika\Find\Service\ResultFormatter;
 
 class ResultFormatterTest extends TestCase
 {

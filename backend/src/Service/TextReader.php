@@ -1,6 +1,6 @@
 <?php
 
-namespace Tokimikichika\Find;
+namespace Tokimikichika\Find\Service;
 
 /**
  * Класс для чтения текста из файла

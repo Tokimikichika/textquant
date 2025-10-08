@@ -3,8 +3,8 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Tokimikichika\Find\Service\TextAnalyzer;
-use Tokimikichika\Find\TextReader;
-use Tokimikichika\Find\ResultFormatter;
+use Tokimikichika\Find\Service\TextReader;
+use Tokimikichika\Find\Service\ResultFormatter;
 
 /**
  * Показывает справку по использованию скрипта

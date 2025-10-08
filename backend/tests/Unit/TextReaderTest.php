@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use Tokimikichika\Find\TextReader;
+use Tokimikichika\Find\Service\TextReader;
 
 /**
  * @group text-reader
