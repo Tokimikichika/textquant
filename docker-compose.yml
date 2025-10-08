@@ -14,6 +14,18 @@ services:
     networks:
       - appnet
 
+  node:
+    image: node:20-alpine
+    container_name: tokimikichika-find-node
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    command: sh -c "npm ci && npm run dev -- --host 0.0.0.0"
+    expose:
+      - "5173"
+    networks:
+      - appnet
+
   nginx:
     build:
       context: .
@@ -21,6 +33,7 @@ services:
     container_name: tokimikichika-find-nginx
     depends_on:
       - backend
+      - node
     ports:
       - "6123:80"
     networks:
