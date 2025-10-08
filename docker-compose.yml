@@ -11,11 +11,11 @@ services:
     networks:
       - appnet
 
-  frontend:
+  nginx:
     build:
       context: .
-      dockerfile: ./frontend/Dockerfile
-    container_name: tokimikichika-find-frontend
+      dockerfile: ./nginx/Dockerfile
+    container_name: tokimikichika-find-nginx
     depends_on:
       - backend
     ports:
