@@ -2,14 +2,9 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Tokimikichika\Find\CharacterCounter;
-use Tokimikichika\Find\ParagraphCounter;
-use Tokimikichika\Find\ResultFormatter;
-use Tokimikichika\Find\SentenceCounter;
-use Tokimikichika\Find\TextAnalyzer;
+use Tokimikichika\Find\Service\TextAnalyzer;
 use Tokimikichika\Find\TextReader;
-use Tokimikichika\Find\TopWordAnalyzer;
-use Tokimikichika\Find\WordCounter;
+use Tokimikichika\Find\ResultFormatter;
 
 /**
  * Показывает справку по использованию скрипта
@@ -29,19 +24,7 @@ if (isset($options["h"]) || isset($options["help"])) {
     exit(0);
 }
 
-$wordCounter = new WordCounter();
-$characterCounter = new CharacterCounter();
-$sentenceCounter = new SentenceCounter();
-$paragraphCounter = new ParagraphCounter();
-$topWordAnalyzer = new TopWordAnalyzer();
-
-$analyzer = new TextAnalyzer(
-    $wordCounter,
-    $characterCounter,
-    $sentenceCounter,
-    $paragraphCounter,
-    $topWordAnalyzer
-);
+$analyzer = new TextAnalyzer();
 
 $formatter = new ResultFormatter();
 
