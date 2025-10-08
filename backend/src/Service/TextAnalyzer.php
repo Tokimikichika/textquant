@@ -1,9 +1,14 @@
 <?php
 
-namespace Tokimikichika\Find;
+namespace Tokimikichika\Find\Service;
+
+use Tokimikichika\Find\WordCounter;
+use Tokimikichika\Find\CharacterCounter;
+use Tokimikichika\Find\SentenceCounter;
+use Tokimikichika\Find\ParagraphCounter;
+use Tokimikichika\Find\TopWordAnalyzer;
 
 /**
- *
  * Координирует работу всех счетчиков для анализа текста
  */
 class TextAnalyzer
@@ -38,3 +43,5 @@ class TextAnalyzer
         ];
     }
 }
+
+

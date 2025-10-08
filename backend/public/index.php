@@ -12,7 +12,7 @@ use Tokimikichika\Find\CharacterCounter;
 use Tokimikichika\Find\SentenceCounter;
 use Tokimikichika\Find\ParagraphCounter;
 use Tokimikichika\Find\TopWordAnalyzer;
-use Tokimikichika\Find\TextAnalyzer;
+use Tokimikichika\Find\Service\TextAnalyzer;
 use Tokimikichika\Find\TextReader;
 use Tokimikichika\Find\Controller\ApiController;
 

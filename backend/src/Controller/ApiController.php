@@ -4,7 +4,7 @@ namespace Tokimikichika\Find\Controller;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Tokimikichika\Find\TextAnalyzer;
+use Tokimikichika\Find\Service\TextAnalyzer;
 
 /**
  * Контроллер для API
