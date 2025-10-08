@@ -6,6 +6,9 @@ services:
       context: ./backend
     container_name: tokimikichika-find-backend
     working_dir: /var/www/html
+    volumes:
+      - ./backend:/var/www/html
+      - backend_vendor:/var/www/html/vendor
     expose:
       - "9000"
     networks:
@@ -26,6 +29,10 @@ services:
 networks:
   appnet:
     driver: bridge
+  
+volumes:
+  backend_vendor:
+    driver: local
 
 
 
