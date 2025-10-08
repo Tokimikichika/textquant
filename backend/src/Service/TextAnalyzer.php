@@ -7,9 +7,6 @@ namespace Tokimikichika\Find\Service;
  */
 class TextAnalyzer
 {
-    public function __construct()
-    {
-    }
 
     /**
      * Анализ текста
@@ -77,10 +74,12 @@ class TextAnalyzer
      */
     private function getSentences(string $text): array
     {
-        $sentences = preg_split('/[.!?]+/', $text);
-        return array_filter($sentences, function ($sentence) {
-            return !empty(trim($sentence));
-        });
+        $parts = preg_split('/[.!?]+/u', $text);
+        if ($parts === false) {
+            return [];
+        }
+        $sentences = array_map(static fn($s) => trim((string)$s), $parts);
+        return array_values(array_filter($sentences, static fn($s) => $s !== ''));
     }
 
     /**
@@ -142,10 +141,9 @@ class TextAnalyzer
             return 0.0;
         }
 
-        $wordCounter = new WordCounter();
         $totalWords = 0;
         foreach ($sentences as $sentence) {
-            $totalWords += $wordCounter->count($sentence);
+            $totalWords += $this->countWords($sentence);
         }
 
         return round($totalWords / count($sentences), 1);
@@ -159,22 +157,19 @@ class TextAnalyzer
      * @return array Список самых частотных слов
      */
     private function getTopWords(string $text, int $limit = 5): array
-    {   
-        $wordCounter = new WordCounter();
-        $words = $wordCounter->getWords($text);
-        $wordCounts = array_count_values($words);
-        $sortedWords = arsort($wordCounts);
-        $topWords = [];
-        $count = 0;
-        foreach ($sortedWords as $word => $frequency) {
-            if ($count >= $limit) {
-                break;
-            }
-            $topWords[] = ['word' => $word, 'count' => $frequency];
-            $count++;
+    {
+        $words = $this->getWords($text);
+        if ($words === []) {
+            return [];
         }
-
-        return $topWords;
+        $frequencies = array_count_values($words);
+        arsort($frequencies); 
+        $limited = array_slice($frequencies, 0, $limit, true);
+        $result = [];
+        foreach ($limited as $word => $count) {
+            $result[] = ['word' => $word, 'count' => $count];
+        }
+        return $result;
     }
 }
 
