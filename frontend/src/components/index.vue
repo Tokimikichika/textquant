@@ -55,6 +55,11 @@ export default {
         }
         if (!res.ok) throw new Error(json.error || 'Request failed');
         this.result = json;
+        this.text = '';
+        this.pickedFileName = '';
+        if (this.$refs && this.$refs.fileInput) {
+          try { this.$refs.fileInput.value = ''; } catch {}
+        }
       } catch (e) {
         this.error = e.message || String(e);
       } finally {
@@ -71,14 +76,14 @@ export default {
       <h1 class="title">Текстовый анализатор</h1>
       <p class="subtitle">Вставьте текст и получите статистику</p>
     </header>
-
+    <div class="main-grid" :class="{ single: !result }">
     <section class="card">
       <form @submit.prevent="analyze" class="form">
         <label class="label" for="ta">Текст</label>
         <textarea id="ta" v-model="text" rows="8" class="textarea" placeholder="Введите или вставьте текст для анализа..."></textarea>
         <div class="file-row">
           <label class="file-label">
-            <input class="file" type="file" accept=".txt,text/plain" @change="handleFile" />
+            <input ref="fileInput" class="file" type="file" accept=".txt,text/plain" @change="handleFile" />
             <span class="file-btn">Выбрать файл</span>
             <span class="file-name" v-if="pickedFileName">{{ pickedFileName }}</span>
             <span class="file-hint" v-else>Поддерживаются .txt</span>
@@ -111,6 +116,7 @@ export default {
         </ol>
       </div>
     </section>
+    </div>
   </main>
 </template>
 
@@ -162,6 +168,35 @@ export default {
   padding: 18px;
 }
 
+.main-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 16px;
+  align-items: start;
+}
+
+.main-grid .card {
+  max-width: 100%;
+  margin: 16px 0;
+}
+
+.main-grid.single {
+  display: block;
+}
+
+.main-grid.single .card {
+  max-width: 880px;
+  margin: 16px auto;
+}
+
+@media (max-width: 900px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .form {
   display: grid;
   gap: 10px;
@@ -202,11 +237,14 @@ export default {
 .file-label { display: inline-flex; align-items: center; gap: 10px; }
 .file { display: none; }
 .file-btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: #0ea5e9;
   color: #fff;
-  padding: 8px 12px;
-  border-radius: 8px;
+  height: 44px;
+  width: 180px;
+  border-radius: 10px;
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(14, 165, 233, .2);
@@ -218,7 +256,9 @@ export default {
   appearance: none;
   border: 0;
   border-radius: 10px;
-  padding: 10px 14px;
+  height: 44px;
+  padding: 0 16px;
+  width: 180px;
   font-weight: 600;
   cursor: pointer;
   transition: transform .05s ease, box-shadow .2s ease, opacity .2s ease;

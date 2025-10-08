@@ -20,6 +20,7 @@ services:
     working_dir: /app
     volumes:
       - ./frontend:/app
+      - node_modules:/app/node_modules
     command: sh -c "npm ci && npm run dev -- --host 0.0.0.0"
     expose:
       - "5173"
@@ -27,15 +28,15 @@ services:
       - appnet
 
   nginx:
-    build:
-      context: .
-      dockerfile: ./nginx/Dockerfile
+    image: nginx:1.27-alpine
     container_name: tokimikichika-find-nginx
     depends_on:
       - backend
       - node
     ports:
       - "6123:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     networks:
       - appnet
 
@@ -45,6 +46,8 @@ networks:
   
 volumes:
   backend_vendor:
+    driver: local
+  node_modules:
     driver: local
 
 
