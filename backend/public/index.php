@@ -47,8 +47,4 @@ $app->options('/{routes:.+}', function ($request, $response) {
 
 $app->post('/api/v1/analyze/text', [$api, 'analyzeText']);
 
-$app->get('/', function (Request $request, Response $response) {
-    return $response->withHeader('Location', 'http://localhost:6123/')->withStatus(302);
-});
-
 $app->run();
