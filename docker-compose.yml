@@ -4,7 +4,7 @@ services:
   backend:
     build:
       context: ./backend
-    container_name: tokimikichika/find-backend
+    container_name: tokimikichika-find-backend
     working_dir: /var/www/html
     expose:
       - "9000"
@@ -15,7 +15,7 @@ services:
     build:
       context: .
       dockerfile: ./frontend/Dockerfile
-    container_name: tokimikichika/find-frontend
+    container_name: tokimikichika-find-frontend
     depends_on:
       - backend
     ports:
