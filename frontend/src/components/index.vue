@@ -117,7 +117,7 @@ export default {
 <style scoped>
 .page {
   min-height: 100vh;
-  min-width: 150%;
+  min-width: 100%;
   padding: 24px 16px 48px;
   position: relative;
   overflow-x: hidden;
