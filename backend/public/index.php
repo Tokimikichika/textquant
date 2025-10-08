@@ -14,7 +14,7 @@ use Tokimikichika\Find\ParagraphCounter;
 use Tokimikichika\Find\TopWordAnalyzer;
 use Tokimikichika\Find\TextAnalyzer;
 use Tokimikichika\Find\TextReader;
-use Tokimikichika\Find\ApiController;
+use Tokimikichika\Find\Controller\ApiController;
 
 $app = AppFactory::create();
 
