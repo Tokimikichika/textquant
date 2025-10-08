@@ -3,12 +3,7 @@
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use Tokimikichika\Find\TextAnalyzer;
-use Tokimikichika\Find\WordCounter;
-use Tokimikichika\Find\CharacterCounter;
-use Tokimikichika\Find\SentenceCounter;
-use Tokimikichika\Find\ParagraphCounter;
-use Tokimikichika\Find\TopWordAnalyzer;
+use Tokimikichika\Find\Service\TextAnalyzer;
 
 class SentenceCounterTest extends TestCase
 {
@@ -16,19 +11,7 @@ class SentenceCounterTest extends TestCase
 
     protected function setUp(): void
     {
-        $wordCounter = new WordCounter();
-        $characterCounter = new CharacterCounter();
-        $sentenceCounter = new SentenceCounter();
-        $paragraphCounter = new ParagraphCounter();
-        $topWordAnalyzer = new TopWordAnalyzer();
-
-        $this->textAnalyzer = new TextAnalyzer(
-            $wordCounter,
-            $characterCounter,
-            $sentenceCounter,
-            $paragraphCounter,
-            $topWordAnalyzer
-        );
+        $this->textAnalyzer = new TextAnalyzer();
     }
 
     public function testAnalyzeComplexText(): void

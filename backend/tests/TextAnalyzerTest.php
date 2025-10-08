@@ -2,12 +2,7 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Tokimikichika\Find\TextAnalyzer;
-use Tokimikichika\Find\WordCounter;
-use Tokimikichika\Find\CharacterCounter;
-use Tokimikichika\Find\SentenceCounter;
-use Tokimikichika\Find\ParagraphCounter;
-use Tokimikichika\Find\TopWordAnalyzer;
+use Tokimikichika\Find\Service\TextAnalyzer;
 
 /**
  * Класс для тестирования TextAnalyzer
@@ -26,19 +21,7 @@ class TextAnalyzerTest
      */
     private function createTextAnalyzer(): TextAnalyzer
     {
-        $wordCounter = new WordCounter();
-        $characterCounter = new CharacterCounter();
-        $sentenceCounter = new SentenceCounter();
-        $paragraphCounter = new ParagraphCounter();
-        $topWordAnalyzer = new TopWordAnalyzer();
-        
-        return new TextAnalyzer(
-            $wordCounter,
-            $characterCounter,
-            $sentenceCounter,
-            $paragraphCounter,
-            $topWordAnalyzer
-        );
+        return new TextAnalyzer();
     }
 
     /**
