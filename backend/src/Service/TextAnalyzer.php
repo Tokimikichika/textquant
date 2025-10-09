@@ -79,6 +79,7 @@ class TextAnalyzer
             return [];
         }
         $sentences = array_map(static fn($s) => trim((string)$s), $parts);
+
         return array_values(array_filter($sentences, static fn($s) => $s !== ''));
     }
 
@@ -169,6 +170,7 @@ class TextAnalyzer
         foreach ($limited as $word => $count) {
             $result[] = ['word' => $word, 'count' => $count];
         }
+
         return $result;
     }
 }
