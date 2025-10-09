@@ -8,6 +8,7 @@ export default {
       error: '',
       result: null,
       pickedFileName: '',
+      inputType: 'text',
     };
   },
   methods: {
@@ -39,13 +40,23 @@ export default {
       try {
         const payloadText = (this.text || '').trim();
         if (!payloadText) {
-          this.error = 'Введите текст';
+          this.error = this.inputType === 'url' ? 'Введите URL' : 'Введите текст';
           return;
         }
-        const res = await fetch('/api/v1/analyze/text', {
+
+        let endpoint, body;
+        if (this.inputType === 'url') {
+          endpoint = '/api/v1/analyze/url';
+          body = { url: payloadText };
+        } else {
+          endpoint = '/api/v1/analyze/text';
+          body = { text: payloadText };
+        }
+
+        const res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: payloadText })
+          body: JSON.stringify(body)
         });
         let json;
         try {
@@ -83,6 +94,16 @@ export default {
       } finally {
         this.loading = false;
       }
+    },
+    switchInputType(type) {
+      this.inputType = type;
+      this.text = '';
+      this.error = '';
+      this.result = null;
+      this.pickedFileName = '';
+      if (this.$refs && this.$refs.fileInput) {
+        try { this.$refs.fileInput.value = ''; } catch {}
+      }
     }
   }
 }
@@ -97,9 +118,33 @@ export default {
     <div class="main-grid" :class="{ single: !result }">
     <section class="card">
       <form @submit.prevent="analyze" class="form">
-        <label class="label" for="ta">Текст</label>
-        <textarea id="ta" v-model="text" rows="8" class="textarea" placeholder="Введите или вставьте текст для анализа..."></textarea>
-        <div class="file-row">
+        <div class="input-type-switcher">
+          <button 
+            type="button" 
+            class="switcher-btn" 
+            :class="{ active: inputType === 'text' }"
+            @click="switchInputType('text')"
+          >
+            Текст
+          </button>
+          <button 
+            type="button" 
+            class="switcher-btn" 
+            :class="{ active: inputType === 'url' }"
+            @click="switchInputType('url')"
+          >
+            URL
+          </button>
+        </div>
+        <label class="label" for="ta">{{ inputType === 'url' ? 'URL веб-страницы' : 'Текст' }}</label>
+        <textarea 
+          id="ta" 
+          v-model="text" 
+          rows="8" 
+          class="textarea" 
+          :placeholder="inputType === 'url' ? 'Введите URL веб-страницы для анализа...' : 'Введите или вставьте текст для анализа...'"
+        ></textarea>
+        <div class="file-row" v-if="inputType === 'text'">
           <label class="file-label">
             <input ref="fileInput" class="file" type="file" accept=".txt,text/plain" @change="handleFile" />
             <span class="file-btn">Выбрать файл</span>
@@ -108,7 +153,15 @@ export default {
           </label>
         </div>
         <div class="actions">
-          <button class="btn btn-primary" type="button" :disabled="loading" @click="fillRandom()">Сгенерировать текст</button>
+          <button 
+            class="btn btn-primary" 
+            type="button" 
+            :disabled="loading || inputType === 'url'" 
+            @click="fillRandom()"
+            v-if="inputType === 'text'"
+          >
+            Сгенерировать текст
+          </button>
           <button class="btn btn-primary" type="submit" :disabled="loading || !(text && text.trim())">
             {{ loading ? 'Анализ…' : 'Анализировать' }}
           </button>
@@ -245,6 +298,35 @@ export default {
   background: #ffffff;
   border-color: #60a5fa;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.input-type-switcher {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.switcher-btn {
+  appearance: none;
+  border: 2px solid #e2e8f0;
+  background: #fff;
+  color: #64748b;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.switcher-btn:hover {
+  border-color: #0ea5e9;
+  color: #0ea5e9;
+}
+
+.switcher-btn.active {
+  background: #0ea5e9;
+  border-color: #0ea5e9;
+  color: #fff;
 }
 
 .actions {
