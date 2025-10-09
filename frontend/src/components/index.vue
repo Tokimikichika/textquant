@@ -55,7 +55,25 @@ export default {
         }
         if (!res.ok) throw new Error(json.error || 'Request failed');
         this.result = json;
-        this.text = '';
+      } catch (e) {
+        this.error = e.message || String(e);
+      } finally {
+        this.loading = false;
+      }
+    },
+    async fillRandom() {
+      this.error = '';
+      this.loading = true;
+      try {
+        const res = await fetch(`/api/v1/text/random`);
+        let json;
+        try {
+          json = await res.json();
+        } catch {
+          throw new Error('Некорректный ответ сервера');
+        }
+        if (!res.ok) throw new Error(json.error || 'Request failed');
+        this.text = String(json.text || '');
         this.pickedFileName = '';
         if (this.$refs && this.$refs.fileInput) {
           try { this.$refs.fileInput.value = ''; } catch {}
@@ -90,6 +108,7 @@ export default {
           </label>
         </div>
         <div class="actions">
+          <button class="btn btn-primary" type="button" :disabled="loading" @click="fillRandom()">Сгенерировать текст</button>
           <button class="btn btn-primary" type="submit" :disabled="loading || !(text && text.trim())">
             {{ loading ? 'Анализ…' : 'Анализировать' }}
           </button>
