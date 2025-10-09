@@ -1,27 +1,20 @@
-FROM composer:2 AS vendor
-
-WORKDIR /app
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --prefer-dist --no-interaction --no-progress
-
-FROM php:8.2-fpm AS app
+FROM php:8.2-fpm
 
 WORKDIR /var/www/html
 
 RUN set -eux; \
     apt-get update; \
-    apt-get install -y --no-install-recommends libicu-dev libonig-dev; \
+    apt-get install -y --no-install-recommends git unzip libicu-dev libonig-dev; \
     docker-php-ext-install mbstring; \
     docker-php-ext-install intl || true; \
     rm -rf /var/lib/apt/lists/*
 
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+ && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
+ && php -r "unlink('composer-setup.php');"
+
 COPY . /var/www/html
 
-COPY --from=vendor /app/vendor /var/www/html/vendor
-
-ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS=1 \
-    PHP_MEMORY_LIMIT=256M
+RUN composer install --no-dev --prefer-dist --no-interaction --no-progress
 
 EXPOSE 9000
-
-
