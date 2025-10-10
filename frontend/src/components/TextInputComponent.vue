@@ -55,9 +55,9 @@ export default {
 
 <template>
   <form @submit.prevent="submitAndClear" class="form">
-    <label class="label" for="ta">Текст</label>
+    <label class="label" for="text-area">Текст</label>
     <textarea 
-      id="ta" 
+      id="text-area" 
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
       rows="8" 
