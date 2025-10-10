@@ -38,6 +38,11 @@ export default {
       };
       reader.readAsText(file, 'utf-8');
     },
+    submitAndClear() {
+      this.$emit('analyze');
+      this.$emit('update:modelValue', '');
+      this.clearFile();
+    },
     clearFile() {
       this.pickedFileName = '';
       if (this.$refs && this.$refs.fileInput) {
@@ -49,7 +54,7 @@ export default {
 </script>
 
 <template>
-  <form @submit.prevent="$emit('analyze')" class="form">
+  <form @submit.prevent="submitAndClear" class="form">
     <label class="label" for="ta">Текст</label>
     <textarea 
       id="ta" 

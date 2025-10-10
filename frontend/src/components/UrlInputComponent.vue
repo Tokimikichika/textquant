@@ -11,12 +11,18 @@ export default {
       default: false
     }
   },
-  emits: ['update:modelValue', 'analyze']
+  emits: ['update:modelValue', 'analyze'],
+  methods: {
+    submitAndClear() {
+      this.$emit('analyze');
+      this.$emit('update:modelValue', '');
+    }
+  }
 }
 </script>
 
 <template>
-  <form @submit.prevent="$emit('analyze')" class="form">
+  <form @submit.prevent="submitAndClear" class="form">
     <label class="label" for="url">URL веб-страницы</label>
     <textarea 
       id="url" 
