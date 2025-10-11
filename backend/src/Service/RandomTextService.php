@@ -2,20 +2,19 @@
 
 namespace Tokimikichika\Find\Service;
 
+use Tokimikichika\Find\Enum\ApiConfig;
+
 class RandomTextService
 {
     /**
      * Возвращает случайный текст из внешнего источника
      */
-    public function get(): string
+    public function getRandomText(): string
     {
-        $url = "https://fish-text.ru/get?type=paragraph&number=1&format=json";
-        $data = $this->fetchJson($url);
-        if (is_array($data) && isset($data['text']) && is_string($data['text'])) {
-            return $data['text'];
-        }
-
-        throw new \RuntimeException('Unexpected response from fish-text.ru');
+        $data = $this->fetchJson(ApiConfig::FISH_TEXT_API_URL->value);
+        $this->validateApiResponse($data);
+        
+        return $data['text'];
     }
 
     /**
