@@ -4,14 +4,12 @@ namespace Tokimikichika\Find\Controller;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Tokimikichika\Find\Service\TextAnalyzer;
-use Tokimikichika\Find\Service\WebScraperService;
+use Tokimikichika\Find\Service\UrlAnalysisService;
 
 class UrlController
 {
     public function __construct(
-        private TextAnalyzer $analyzer,
-        private WebScraperService $webScraperService
+        private UrlAnalysisService $urlAnalysisService
     ) {
     }
 
@@ -28,8 +26,7 @@ class UrlController
         }
 
         try {
-            $text = $this->webScraperService->scrapeUrl($data['url']);
-            $results = $this->analyzer->analyze($text, 'url');
+            $results = $this->urlAnalysisService->analyzeUrl($data['url']);
             $payload = json_encode($results, JSON_UNESCAPED_UNICODE);
             $response->getBody()->write($payload);
         } catch (\Exception $e) {

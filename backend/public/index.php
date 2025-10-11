@@ -13,15 +13,17 @@ use Tokimikichika\Find\Controller\RandomController;
 use Tokimikichika\Find\Service\TextAnalyzer;
 use Tokimikichika\Find\Service\RandomTextService;
 use Tokimikichika\Find\Service\WebScraperService;
+use Tokimikichika\Find\Service\UrlAnalysisService;
 
 $app = AppFactory::create();
 
 $analyzer = new TextAnalyzer();
 $randomTextService = new RandomTextService();
 $webScraperService = new WebScraperService();
+$urlAnalysisService = new UrlAnalysisService($analyzer, $webScraperService);
 
 $textController = new TextController($analyzer);
-$urlController = new UrlController($analyzer, $webScraperService);
+$urlController = new UrlController($urlAnalysisService);
 $randomController = new RandomController($randomTextService);
 
 $app->post('/api/v1/analyze/text', [$textController, 'analyze']);
