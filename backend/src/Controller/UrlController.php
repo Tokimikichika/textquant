@@ -29,7 +29,7 @@ class UrlController
             $results = $this->urlAnalysisService->analyzeUrl($data['url']);
             $payload = json_encode($results, JSON_UNESCAPED_UNICODE);
             $response->getBody()->write($payload);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $response->getBody()->write(json_encode(['error' => $e->getMessage()]));
             return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
         }
