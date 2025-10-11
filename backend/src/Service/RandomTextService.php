@@ -18,6 +18,85 @@ class RandomTextService
     }
 
     /**
+     * Валидирует ответ от API
+     */
+    private function validateApiResponse(array $data): void
+    {
+        $this->validateTextFieldExists($data);
+        $this->validateTextFieldType($data);
+        $this->validateTextFieldNotEmpty($data);
+    }
+
+    /**
+     * Проверяет наличие поля text в ответе
+     */
+    private function validateTextFieldExists(array $data): void
+    {
+        if (!isset($data['text'])) {
+            throw new \RuntimeException('Missing text field in API response');
+        }
+    }
+
+    /**
+     * Проверяет тип поля text
+     */
+    private function validateTextFieldType(array $data): void
+    {
+        if (!is_string($data['text'])) {
+            throw new \RuntimeException('Text field is not a string');
+        }
+    }
+
+    /**
+     * Проверяет, что поле text не пустое
+     */
+    private function validateTextFieldNotEmpty(array $data): void
+    {
+        if (empty(trim($data['text']))) {
+            throw new \RuntimeException('Text field is empty');
+        }
+    }
+
+    /**
+     * Валидирует URL
+     */
+    private function validateUrl(string $url): void
+    {
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+            throw new \InvalidArgumentException('Invalid URL format');
+        }
+
+        $parsedUrl = parse_url($url);
+        if (!in_array($parsedUrl['scheme'] ?? '', ['http', 'https'])) {
+            throw new \InvalidArgumentException('Only HTTP/HTTPS URLs are supported');
+        }
+    }
+
+    /**
+     * Валидирует HTTP ответ
+     */
+    private function validateHttpResponse(string $raw): void
+    {
+        if ($raw === false) {
+            throw new \RuntimeException('HTTP request failed');
+        }
+
+        if (empty($raw)) {
+            throw new \RuntimeException('Empty response from server');
+        }
+    }
+
+    /**
+     * Валидирует JSON
+     */
+    private function validateJson(string $raw): void
+    {
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \RuntimeException('JSON decode error: ' . json_last_error_msg());
+        }
+    }
+
+    /**
      * Выполняет GET-запрос и декодирует JSON
      */
     private function fetchJson(string $url): array
