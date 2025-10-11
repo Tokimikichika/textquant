@@ -18,7 +18,7 @@ class RandomController
      */
     public function getText(Request $request, Response $response): Response
     {
-        $text = $this->randomTextService->get();
+        $text = $this->randomTextService->getRandomText();
 
         $payload = json_encode(['text' => $text], JSON_UNESCAPED_UNICODE);
         $response->getBody()->write($payload);
