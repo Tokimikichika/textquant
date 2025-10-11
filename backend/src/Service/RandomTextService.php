@@ -101,6 +101,17 @@ class RandomTextService
      */
     private function fetchJson(string $url): array
     {
+        $this->validateUrl($url);
+        $raw = $this->makeHttpRequest($url);
+        $this->validateHttpResponse($raw);
+        return $this->parseJson($raw);
+    }
+
+    /**
+     * Выполняет HTTP-запрос
+     */
+    private function makeHttpRequest(string $url): array
+    {
         $context = stream_context_create([
             'http' => [
                 'method' => 'GET',
@@ -112,14 +123,19 @@ class RandomTextService
             ]
         ]);
 
-        $raw = @file_get_contents($url, false, $context);
-        if ($raw === false) {
-            throw new \RuntimeException('HTTP request failed: ' . $url);
-        }
+        return @file_get_contents($url, false, $context);
+    }
 
+    /**
+     * Парсит JSON ответ
+     */
+    private function parseJson(string $raw): array
+    {
         $decoded = json_decode($raw, true);
+        $this->validateJson($raw);
+        
         if (!is_array($decoded)) {
-            throw new \RuntimeException('Invalid JSON response');
+            throw new \RuntimeException('Response is not a JSON object');
         }
 
         return $decoded;
