@@ -10,54 +10,73 @@
 composer require tokimikichika/find
 ```
 
-## Запуск проекта
-
-### Установка Slim
-```bash
-composer require slim/slim:^4.12 slim/psr7:^1.6
-```
-
-### Веб-интерфейс (через Slim)
-```bash
-# Запустите встроенный сервер с document root на public/
-php -S localhost:8080 -t public
-
-# Откройте в браузере
-http://localhost:8080/
-```
-
 ## Использование
 
-### Веб-интерфейс
-1. Запустите сервер: `php -S localhost:8080 -t public`
-2. Откройте http://localhost:8080 в браузере
-3. Введите текст или загрузите .txt файл
-4. Нажмите "Анализировать текст"
-
-### Программное использование
+### Простое использование
 ```php
-use Tokimikichika\Find\TextAnalyzer;
-use Tokimikichika\Find\WordCounter;
-use Tokimikichika\Find\CharacterCounter;
-use Tokimikichika\Find\SentenceCounter;
-use Tokimikichika\Find\ParagraphCounter;
-use Tokimikichika\Find\TopWordAnalyzer;
+use Tokimikichika\Find\Service\TextAnalyzer;
 
-$wordCounter = new WordCounter();
-$characterCounter = new CharacterCounter();
-$sentenceCounter = new SentenceCounter();
-$paragraphCounter = new ParagraphCounter();
-$topWordAnalyzer = new TopWordAnalyzer();
-
-$analyzer = new TextAnalyzer(
-    $wordCounter,
-    $characterCounter,
-    $sentenceCounter,
-    $paragraphCounter,
-    $topWordAnalyzer
-);
-
+$analyzer = new TextAnalyzer();
 $results = $analyzer->analyze("Hello world!", "text");
+```
+
+### Анализ URL
+```php
+use Tokimikichika\Find\Service\UrlAnalysisService;
+use Tokimikichika\Find\Service\TextAnalyzer;
+use Tokimikichika\Find\Service\WebScraperService;
+
+$analyzer = new TextAnalyzer();
+$webScraper = new WebScraperService();
+$urlAnalysis = new UrlAnalysisService($analyzer, $webScraper);
+
+$results = $urlAnalysis->analyzeUrl("https://example.com");
+```
+
+### Генерация случайного текста
+```php
+use Tokimikichika\Find\Service\RandomTextService;
+
+$randomService = new RandomTextService();
+$randomText = $randomService->getRandomText();
+```
+
+## API Endpoints
+
+### POST /api/v1/analyze/text
+Анализ текста
+```json
+{
+    "text": "Hello world!"
+}
+```
+
+### POST /api/v1/analyze/url
+Анализ URL
+```json
+{
+    "url": "https://example.com"
+}
+```
+
+### GET /api/v1/text/random
+Получение случайного текста
+
+## Пример вывода
+```json
+{
+    "source": "text",
+    "words": 2,
+    "characters": 12,
+    "sentences": 1,
+    "paragraphs": 1,
+    "avg_word_length": 5.5,
+    "avg_sentence_length": 2.0,
+    "top_words": [
+        {"word": "hello", "count": 1},
+        {"word": "world", "count": 1}
+    ]
+}
 ```
 
 ## Консольное использование
@@ -82,49 +101,43 @@ Top 5 words: hello (1), world (1)
 
 ## Тестирование
 
-### Запуск простых тестов
+### Запуск юнит-тестов
 ```bash
-# Запуск базовых тестов
-composer test
-# или
-php tests/TextAnalyzerTest.php
-```
-
-### Запуск юнит-тестов с PHPUnit
-```bash
-# Запуск всех юнит-тестов
 composer test-unit
-# или
-./vendor/bin/phpunit
-
-# Запуск с покрытием кода
-composer test-coverage
-# или
-./vendor/bin/phpunit --coverage-html coverage
-
-# Запуск конкретного теста
-./vendor/bin/phpunit tests/Unit/WordCounterTest.php
 ```
 
-### Тестирование с примером файла
+### Запуск с покрытием кода
 ```bash
-# Анализ тестового файла
-php bin/analyze.php --file="tests/test.txt"
+composer test-coverage
 ```
 
-Файл `tests/test.txt` содержит пример текста для демонстрации работы библиотеки.
-
+### Запуск конкретного теста
+```bash
+./vendor/bin/phpunit tests/Unit/TextAnalyzerTest.php
+```
 
 ## Структура классов
-- `TextAnalyzer` - главный класс для анализа
-- `WordCounter` - подсчет слов и средней длины
-- `CharacterCounter` - подсчет символов
-- `SentenceCounter` - подсчет предложений
-- `ParagraphCounter` - подсчет абзацев
-- `TopWordAnalyzer` - анализ частоты слов
+
+### Сервисы
+- `TextAnalyzer` - главный класс для анализа текста
+- `UrlAnalysisService` - анализ содержимого URL
+- `WebScraperService` - извлечение текста из HTML
+- `RandomTextService` - генерация случайного текста
 - `TextReader` - чтение файлов
 - `ResultFormatter` - форматирование вывода
 
+### Контроллеры
+- `TextController` - обработка анализа текста
+- `UrlController` - обработка анализа URL
+- `RandomController` - генерация случайного текста
+
+### Перечисления
+- `ApiConfig` - конфигурация API
+
+## Зависимости
+- `tokimikichika/htmlsanitizer` - очистка HTML контента
+- `slim/slim` - веб-фреймворк
+- `slim/psr7` - PSR-7 HTTP сообщения
+
 ## Лицензия
 MIT
-```
