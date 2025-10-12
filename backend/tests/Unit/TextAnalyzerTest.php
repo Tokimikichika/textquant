@@ -14,6 +14,10 @@ class TextAnalyzerTest extends TestCase
         $this->textAnalyzer = new TextAnalyzer();
     }
 
+    /**
+     * Тестирует анализ сложного текста с множественными предложениями
+     * Проверяет корректность подсчета слов в сложном тексте
+     */
     public function testAnalyzeComplexText(): void
     {
         $text = "The quick brown fox jumps over the lazy dog. This is a test sentence. Another sentence for testing purposes.";
@@ -22,6 +26,10 @@ class TextAnalyzerTest extends TestCase
         $this->assertEquals(19, $result['words']);
     }
 
+    /**
+     * Тестирует анализ текста с множественными абзацами
+     * Проверяет корректность подсчета абзацев, разделенных двойными переносами строк
+     */
     public function testAnalyzeTextWithMultipleParagraphs(): void
     {
         $text = "First paragraph.\n\nSecond paragraph.\n\nThird paragraph.";
@@ -30,6 +38,10 @@ class TextAnalyzerTest extends TestCase
         $this->assertEquals(3, $result['paragraphs']);
     }
 
+    /**
+     * Тестирует анализ текста со специальными символами и знаками препинания
+     * Проверяет корректность подсчета предложений с учетом знаков препинания
+     */
     public function testAnalyzeTextWithSpecialCharacters(): void
     {
         $text = "Hello, world! How are you? I'm fine, thank you.";
@@ -38,6 +50,10 @@ class TextAnalyzerTest extends TestCase
         $this->assertEquals(3, $result['sentences']);
     }
 
+    /**
+     * Тестирует анализ текста с Unicode символами (кириллица)
+     * Проверяет корректность работы с не-ASCII символами
+     */
     public function testAnalyzeUnicodeText(): void
     {
         $text = "Привет мир! Как дела?";
