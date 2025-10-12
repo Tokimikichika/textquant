@@ -2,8 +2,17 @@
 
 namespace Tokimikichika\Find\Service;
 
+use Tokimikichika\HtmlSanitizer\HtmlSanitizer;
+
 class WebScraperService
 {
+    private HtmlSanitizer $htmlSanitizer;
+
+    public function __construct()
+    {
+        $this->htmlSanitizer = HtmlSanitizer::create();
+    }
+
     /**
      * Загружает содержимое веб-страницы и конвертирует в обычный текст
      */
@@ -51,19 +60,6 @@ class WebScraperService
      */
     private function extractTextFromHtml(string $html): string
     {
-        $html = preg_replace('/<(script|style)[^>]*>.*?<\/\1>/is', '', $html);
-        
-        $html = preg_replace('/<!--.*?-->/s', '', $html);
-        
-        $html = html_entity_decode($html, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-        
-        $text = strip_tags($html);
-        
-        $text = preg_replace('/\s+/', ' ', $text);
-        $text = preg_replace('/\n\s*\n/', "\n\n", $text);
-        
-        $text = trim($text);
-        
-        return $text;
+        return $this->htmlSanitizer->sanitizeText($html);
     }
 }
