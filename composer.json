@@ -1,0 +1,37 @@
+{
+    "name": "tokimikichika/find",
+    "description": "Text analysis library for counting words, characters, sentences and paragraph",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["text", "analysis", "words", "statistics", "nlp"],
+    "authors": [
+        {
+            "name": "Tokimikichika",
+            "email": "ahileses@mail.ru"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "slim/slim": "4.12",
+        "slim/psr7": "1.6",
+        "tokimikichika/htmlsanitizer": "^0.1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tokimikichika\\Find\\": "backend/src/"
+        }
+    },
+    "bin": ["backend/bin/analyze.php"],
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "phpunit/phpunit": "^10.0"
+    },
+    "scripts": {
+        "test": "php backend/tests/TextAnalyzerTest.php",
+        "test-unit": "./backend/vendor/bin/phpunit",
+        "test-coverage": "./backend/vendor/bin/phpunit --coverage-html coverage",
+        "analyze": "php backend/bin/analyze.php",
+        "cs-fix": "php-cs-fixer fix",
+        "cs-check": "php-cs-fixer fix --dry-run --diff"
+    }
+}
