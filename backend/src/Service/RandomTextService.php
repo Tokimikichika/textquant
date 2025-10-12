@@ -110,7 +110,7 @@ class RandomTextService
     /**
      * Выполняет HTTP-запрос
      */
-    private function makeHttpRequest(string $url): array
+    private function makeHttpRequest(string $url): string
     {
         $context = stream_context_create([
             'http' => [
