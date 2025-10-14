@@ -62,6 +62,9 @@ class TextAnalyzerTest extends TestCase
         $this->assertEquals(4, $result['words']);
     }
 
+    /**
+     * Тестирует анализ текста с числами
+     */
     public function testAnalyzeTextWithNumbers(): void
     {
         $text = "I have 123 apples and 456 oranges.";
@@ -70,6 +73,9 @@ class TextAnalyzerTest extends TestCase
         $this->assertEquals(7, $result['words']);
     }
 
+    /**
+     * Тестирует анализ текста с смешанным содержанием
+     */
     public function testAnalyzeTextWithMixedContent(): void
     {
         $text = "Hello world! This is test123. How are you? I'm fine, thank you.";
@@ -78,6 +84,9 @@ class TextAnalyzerTest extends TestCase
         $this->assertEquals(12, $result['words']);
     }
 
+    /**
+     * Тестирует анализ текста с пустыми строками
+     */
     public function testAnalyzeTextWithEmptyLines(): void
     {
         $text = "First line.\n\n\nSecond line.";
@@ -86,6 +95,9 @@ class TextAnalyzerTest extends TestCase
         $this->assertEquals(2, $result['paragraphs']);
     }
 
+    /**
+     * Тестирует анализ текста с табами и пробелами
+     */
     public function testAnalyzeTextWithTabsAndSpaces(): void
     {
         $text = "Hello\tworld.    How are you?";
@@ -94,6 +106,9 @@ class TextAnalyzerTest extends TestCase
         $this->assertEquals(5, $result['words']);
     }
 
+    /**
+     * Тестирует анализ текста с повторяющимися словами
+     */
     public function testAnalyzeTextWithRepeatedWords(): void
     {
         $text = "the the quick brown fox the";
@@ -102,6 +117,9 @@ class TextAnalyzerTest extends TestCase
         $this->assertEquals('the', $result['top_words'][0]['word']);
     }
 
+    /**
+     * Тестирует анализ текста с повторяющимися словами
+     */
     public function testAnalyzeTextWithRepeatedWordsCount(): void
     {
         $text = "the the quick brown fox the";
@@ -111,7 +129,7 @@ class TextAnalyzerTest extends TestCase
     }
 
     /**
-     * @dataProvider complexTextDataProvider
+     * Тестирует анализ текста с повторяющимися словами
      */
     public function testAnalyzeWithDataProvider(string $text, int $expectedWords, int $expectedSentences): void
     {
@@ -121,6 +139,9 @@ class TextAnalyzerTest extends TestCase
         $this->assertEquals($expectedSentences, $result['sentences']);
     }
 
+    /**
+     * Тестирует анализ текста с повторяющимися словами
+     */
     public function complexTextDataProvider(): array
     {
         return [
