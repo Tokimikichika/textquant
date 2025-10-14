@@ -5,6 +5,9 @@ namespace Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Tokimikichika\Find\Service\RandomTextService;
 
+/** 
+ * Тестирует RandomTextService
+ */
 class RandomTextServiceTest extends TestCase
 {
     private RandomTextService $randomTextService;
