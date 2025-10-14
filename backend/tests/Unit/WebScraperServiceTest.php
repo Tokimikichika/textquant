@@ -5,6 +5,9 @@ namespace Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Tokimikichika\Find\Service\WebScraperService;
 
+/**
+ * Тестирует WebScraperService
+ */
 class WebScraperServiceTest extends TestCase
 {
     private WebScraperService $webScraperService;
