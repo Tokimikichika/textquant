@@ -5,6 +5,9 @@ namespace Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Tokimikichika\Find\Service\TextAnalyzer;
 
+/** 
+ * Тестирует SentenceCounter
+ */
 class SentenceCounterTest extends TestCase
 {
     private TextAnalyzer $textAnalyzer;
@@ -14,6 +17,10 @@ class SentenceCounterTest extends TestCase
         $this->textAnalyzer = new TextAnalyzer();
     }
 
+    /**
+     * 
+     * Тестирует анализ сложного текста
+     */
     public function testAnalyzeComplexText(): void
     {
         $text = "The quick brown fox jumps over the lazy dog. This is a test sentence. Another sentence for testing purposes.";
@@ -22,6 +29,10 @@ class SentenceCounterTest extends TestCase
         $this->assertEquals(19, $result['words']);
     }
 
+    /**
+     * 
+     * Тестирует анализ текста с множественными абзацами
+     */
     public function testAnalyzeTextWithMultipleParagraphs(): void
     {
         $text = "First paragraph.\n\nSecond paragraph.\n\nThird paragraph.";
@@ -30,6 +41,9 @@ class SentenceCounterTest extends TestCase
         $this->assertEquals(3, $result['paragraphs']);
     }
 
+    /**
+     * Тестирует анализ текста с специальными символами
+     */
     public function testAnalyzeTextWithSpecialCharacters(): void
     {
         $text = "Hello, world! How are you? I'm fine, thank you.";
@@ -38,6 +52,9 @@ class SentenceCounterTest extends TestCase
         $this->assertEquals(3, $result['sentences']);
     }
 
+    /**
+     * Тестирует анализ текста с Unicode символами (кириллица)
+     */
     public function testAnalyzeUnicodeText(): void
     {
         $text = "Привет мир! Как дела?";
@@ -46,6 +63,9 @@ class SentenceCounterTest extends TestCase
         $this->assertEquals(4, $result['words']);
     }
 
+    /**
+     * Тестирует анализ текста с числами
+     */
     public function testAnalyzeTextWithNumbers(): void
     {
         $text = "I have 123 apples and 456 oranges.";
@@ -54,6 +74,9 @@ class SentenceCounterTest extends TestCase
         $this->assertEquals(7, $result['words']);
     }
 
+    /**
+     * Тестирует анализ текста с смешанным содержанием
+     */
     public function testAnalyzeTextWithMixedContent(): void
     {
         $text = "Hello world! This is test123. How are you? I'm fine, thank you.";
@@ -62,6 +85,9 @@ class SentenceCounterTest extends TestCase
         $this->assertEquals(12, $result['words']);
     }
 
+    /**
+     * Тестирует анализ текста с пустыми строками
+     */
     public function testAnalyzeTextWithEmptyLines(): void
     {
         $text = "First line.\n\n\nSecond line.";
@@ -70,6 +96,9 @@ class SentenceCounterTest extends TestCase
         $this->assertEquals(2, $result['paragraphs']);
     }
 
+    /**
+     * Тестирует анализ текста с табами и пробелами
+     */
     public function testAnalyzeTextWithTabsAndSpaces(): void
     {
         $text = "Hello\tworld.    How are you?";
@@ -78,6 +107,9 @@ class SentenceCounterTest extends TestCase
         $this->assertEquals(5, $result['words']);
     }
 
+    /**
+     * Тестирует анализ текста с повторяющимися словами
+     */
     public function testAnalyzeTextWithRepeatedWords(): void
     {
         $text = "the the quick brown fox the";
@@ -86,6 +118,9 @@ class SentenceCounterTest extends TestCase
         $this->assertEquals('the', $result['top_words'][0]['word']);
     }
 
+    /**
+     * Тестирует анализ текста с повторяющимися словами
+     */
     public function testAnalyzeTextWithRepeatedWordsCount(): void
     {
         $text = "the the quick brown fox the";
@@ -95,7 +130,7 @@ class SentenceCounterTest extends TestCase
     }
 
     /**
-     * @dataProvider complexTextDataProvider
+     * Тестирует анализ текста с повторяющимися словами
      */
     public function testAnalyzeWithDataProvider(string $text, int $expectedWords, int $expectedSentences): void
     {
@@ -105,6 +140,9 @@ class SentenceCounterTest extends TestCase
         $this->assertEquals($expectedSentences, $result['sentences']);
     }
 
+    /**
+     * Тестирует анализ текста с повторяющимися словами
+     */
     public function complexTextDataProvider(): array
     {
         return [
