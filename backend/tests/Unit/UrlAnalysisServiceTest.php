@@ -5,6 +5,9 @@ namespace Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Tokimikichika\Find\Service\UrlAnalysisService;
 
+/**
+ * Тестирует UrlAnalysisService
+ */
 class UrlAnalysisServiceTest extends TestCase
 {
     private UrlAnalysisService $urlAnalysisService;
