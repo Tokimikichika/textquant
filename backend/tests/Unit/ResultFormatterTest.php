@@ -5,6 +5,9 @@ namespace Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Tokimikichika\Find\Service\ResultFormatter;
 
+/** 
+ * Тестирует ResultFormatter
+ */
 class ResultFormatterTest extends TestCase
 {
     private ResultFormatter $resultFormatter;
@@ -13,49 +16,80 @@ class ResultFormatterTest extends TestCase
     {
         $this->resultFormatter = new ResultFormatter();
     }
-
+    /**
+     * 
+     * Тестирует форматирование числа 0
+     */
     public function testFormatNumberZero(): void
     {
         $result = $this->resultFormatter->formatNumber(0);
         $this->assertEquals('0', $result);
     }
 
+    /**
+     * 
+     * Тестирует форматирование отрицательного числа
+     */
     public function testFormatNumberNegative(): void
     {
         $result = $this->resultFormatter->formatNumber(-123);
         $this->assertEquals('-123', $result);
     }
 
+    /**
+     * 
+     * Тестирует форматирование большого отрицательного числа
+     */
     public function testFormatNumberLargeNegative(): void
     {
         $result = $this->resultFormatter->formatNumber(-1234567);
         $this->assertEquals('-1,234,567', $result);
     }
 
+    /**
+     * 
+     * Тестирует форматирование очень большого числа
+     */
     public function testFormatNumberVeryLarge(): void
     {
         $result = $this->resultFormatter->formatNumber(1234567890123);
         $this->assertEquals('1,234,567,890,123', $result);
     }
 
+    /**
+     * 
+     * Тестирует форматирование очень маленького числа
+     */
     public function testFormatNumberVerySmall(): void
     {
         $result = $this->resultFormatter->formatNumber(1);
         $this->assertEquals('1', $result);
     }
 
+    /**
+     * 
+     * Тестирует форматирование числа с запятыми
+     */
     public function testFormatNumberWithCommas(): void
     {
         $result = $this->resultFormatter->formatNumber(1234);
         $this->assertEquals('1,234', $result);
     }
 
+    /**
+     * 
+     * Тестирует форматирование числа с несколькими запятыми
+     */
     public function testFormatNumberWithMultipleCommas(): void
     {
         $result = $this->resultFormatter->formatNumber(1234567);
         $this->assertEquals('1,234,567', $result);
     }
 
+    /**
+     * 
+     * Тестирует форматирование пустого массива
+     */
     public function testFormatResultsEmptyArray(): void
     {
         $results = [];
@@ -63,6 +97,10 @@ class ResultFormatterTest extends TestCase
         $this->resultFormatter->formatResults($results);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива без source
+     */
     public function testFormatResultsMissingSource(): void
     {
         $results = ['words' => 10];
@@ -70,6 +108,10 @@ class ResultFormatterTest extends TestCase
         $this->resultFormatter->formatResults($results);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива без words
+     */
     public function testFormatResultsMissingWords(): void
     {
         $results = ['source' => 'test.txt'];
@@ -77,6 +119,10 @@ class ResultFormatterTest extends TestCase
         $this->resultFormatter->formatResults($results);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива без characters
+     */
     public function testFormatResultsMissingCharacters(): void
     {
         $results = ['source' => 'test.txt', 'words' => 10];
@@ -84,6 +130,10 @@ class ResultFormatterTest extends TestCase
         $this->resultFormatter->formatResults($results);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива без sentences
+     */
     public function testFormatResultsMissingSentences(): void
     {
         $results = ['source' => 'test.txt', 'words' => 10, 'characters' => 50];
@@ -91,6 +141,10 @@ class ResultFormatterTest extends TestCase
         $this->resultFormatter->formatResults($results);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива без paragraphs
+     */
     public function testFormatResultsMissingParagraphs(): void
     {
         $results = ['source' => 'test.txt', 'words' => 10, 'characters' => 50, 'sentences' => 2];
@@ -98,6 +152,10 @@ class ResultFormatterTest extends TestCase
         $this->resultFormatter->formatResults($results);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива без avg_word_length
+     */
     public function testFormatResultsMissingAvgWordLength(): void
     {
         $results = ['source' => 'test.txt', 'words' => 10, 'characters' => 50, 'sentences' => 2, 'paragraphs' => 1];
@@ -105,6 +163,10 @@ class ResultFormatterTest extends TestCase
         $this->resultFormatter->formatResults($results);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива без avg_sentence_length
+     */
     public function testFormatResultsMissingAvgSentenceLength(): void
     {
         $results = ['source' => 'test.txt', 'words' => 10, 'characters' => 50, 'sentences' => 2, 'paragraphs' => 1, 'avg_word_length' => 5.0];
@@ -112,6 +174,10 @@ class ResultFormatterTest extends TestCase
         $this->resultFormatter->formatResults($results);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива без top_words
+     */
     public function testFormatResultsMissingTopWords(): void
     {
         $results = ['source' => 'test.txt', 'words' => 10, 'characters' => 50, 'sentences' => 2, 'paragraphs' => 1, 'avg_word_length' => 5.0, 'avg_sentence_length' => 5.0];
@@ -119,6 +185,10 @@ class ResultFormatterTest extends TestCase
         $this->resultFormatter->formatResults($results);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с пустым top_words
+     */
     public function testFormatResultsWithEmptyTopWords(): void
     {
         $results = $this->getSampleResults();
@@ -127,6 +197,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('Top 5 words: ', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с одним top_word
+     */
     public function testFormatResultsWithSingleTopWord(): void
     {
         $results = $this->getSampleResults();
@@ -135,6 +209,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('Top 5 words: test (1)', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с несколькими top_words
+     */
     public function testFormatResultsWithMultipleTopWords(): void
     {
         $results = $this->getSampleResults();
@@ -147,6 +225,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('Top 5 words: test (2), word (1), hello (1)', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с нулевыми значениями
+     */
     public function testFormatResultsWithZeroValues(): void
     {
         $results = [
@@ -166,6 +248,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('Paragraphs: 0', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с отрицательными значениями
+     */
     public function testFormatResultsWithNegativeValues(): void
     {
         $results = [
@@ -185,6 +271,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('Paragraphs: -1', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с большими значениями
+     */
     public function testFormatResultsWithLargeValues(): void
     {
         $results = [
@@ -204,6 +294,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('Paragraphs: 10,000', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с float значениями
+     */
     public function testFormatResultsWithFloatValues(): void
     {
         $results = [
@@ -221,6 +315,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('Avg. sentence length: 10.987654321', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с unicode значениями
+     */
     public function testFormatResultsWithUnicodeSource(): void
     {
         $results = $this->getSampleResults();
@@ -229,6 +327,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('File: тест.txt', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с специальными символами в source
+     */
     public function testFormatResultsWithSpecialCharactersInSource(): void
     {
         $results = $this->getSampleResults();
@@ -237,6 +339,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('File: test@file#1.txt', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с пустым source
+     */
     public function testFormatResultsWithEmptySource(): void
     {
         $results = $this->getSampleResults();
@@ -245,6 +351,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('File: ', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с null source
+     */
     public function testFormatResultsWithNullSource(): void
     {
         $results = $this->getSampleResults();
@@ -253,6 +363,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('File: ', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с boolean source
+     */
     public function testFormatResultsWithBooleanSource(): void
     {
         $results = $this->getSampleResults();
@@ -261,6 +375,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('File: 1', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с array source
+     */
     public function testFormatResultsWithArraySource(): void
     {
         $results = $this->getSampleResults();
@@ -269,6 +387,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('File: Array', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с object source
+     */
     public function testFormatResultsWithObjectSource(): void
     {
         $results = $this->getSampleResults();
@@ -277,6 +399,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('File: object', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с resource source
+     */
     public function testFormatResultsWithResourceSource(): void
     {
         $results = $this->getSampleResults();
@@ -286,6 +412,10 @@ class ResultFormatterTest extends TestCase
         fclose($results['source']);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с callable source
+     */
     public function testFormatResultsWithCallableSource(): void
     {
         $results = $this->getSampleResults();
@@ -294,6 +424,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('File: callable', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с closure source
+     */
     public function testFormatResultsWithClosureSource(): void
     {
         $results = $this->getSampleResults();
@@ -302,6 +436,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('File: closure', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с iterable source
+     */
     public function testFormatResultsWithIterableSource(): void
     {
         $results = $this->getSampleResults();
@@ -310,6 +448,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('File: iterable', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с stringable source
+     */
     public function testFormatResultsWithStringableSource(): void
     {
         $results = $this->getSampleResults();
@@ -323,6 +465,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('File: ', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с numeric source
+     */
     public function testFormatResultsWithNumericSource(): void
     {
         $results = $this->getSampleResults();
@@ -331,6 +477,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('File: 123', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с float source
+     */
     public function testFormatResultsWithFloatSource(): void
     {
         $results = $this->getSampleResults();
@@ -339,6 +489,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('File: 123.456', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с infinity source
+     */
     public function testFormatResultsWithInfinitySource(): void
     {
         $results = $this->getSampleResults();
@@ -347,6 +501,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('File: ', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с NaN source
+     */
     public function testFormatResultsWithNaNSource(): void
     {
         $results = $this->getSampleResults();
@@ -355,6 +513,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('File: ', $formatted);
     }
 
+    /**
+     * 
+     * Тестирует форматирование массива с negative infinity source
+     */
     public function testFormatResultsWithNegativeInfinitySource(): void
     {
         $results = $this->getSampleResults();
@@ -363,6 +525,10 @@ class ResultFormatterTest extends TestCase
         $this->assertStringContainsString('File: ', $formatted);
     }
     
+    /**
+     * 
+     * Тестирует форматирование массива с sample данными
+     */
     private function getSampleResults(): array
     {
         return [
