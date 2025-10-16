@@ -97,10 +97,6 @@ class RandomTextService
      */
     private function validateHttpResponse(string $raw): void
     {
-        if ($raw === false) {
-            throw new \RuntimeException('HTTP request failed');
-        }
-
         if (empty($raw)) {
             throw new \RuntimeException('Empty response from server');
         }
@@ -149,7 +145,11 @@ class RandomTextService
             ]
         ]);
 
-        return @file_get_contents($url, false, $context);
+        $result = @file_get_contents($url, false, $context);
+        if ($result === false) {
+            throw new \RuntimeException('HTTP request failed');
+        }
+        return $result;
     }
 
     /**
