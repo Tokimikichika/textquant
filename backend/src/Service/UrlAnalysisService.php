@@ -2,6 +2,8 @@
 
 namespace Tokimikichika\Find\Service;
 
+use Tokimikichika\Find\Exception\InvalidUrlException;
+
 /**
  * Сервис для анализа содержимого веб-страницы по URL
  */
@@ -35,7 +37,7 @@ class UrlAnalysisService
     private function validateUrl(string $url): void
     {
         if (empty(trim($url))) {
-            throw new \InvalidArgumentException('URL is required');
+            throw new InvalidUrlException('URL is required');
         }
     }
 }
