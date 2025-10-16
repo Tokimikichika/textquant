@@ -4,9 +4,10 @@ namespace Tokimikichika\Find\Controller;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Tokimikichika\Find\Controller\Base\AbstractController;
 use Tokimikichika\Find\Service\RandomTextService;
 
-class RandomController
+class RandomController extends AbstractController
 {
     public function __construct(
         private RandomTextService $randomTextService
@@ -23,12 +24,6 @@ class RandomController
     {
         $text = $this->randomTextService->getRandomText();
 
-        $payload = json_encode(['text' => $text], JSON_UNESCAPED_UNICODE);
-        if ($payload === false) {
-            $payload = '{"error":"Encoding error"}';
-        }
-        $response->getBody()->write($payload);
-
-        return $response->withHeader('Content-Type', 'application/json; charset=utf-8');
+        return $this->json($response, ['text' => $text]);
     }
 }
