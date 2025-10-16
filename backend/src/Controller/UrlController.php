@@ -18,22 +18,22 @@ class UrlController
      */
     public function analyze(Request $request, Response $response): Response
     {
-        $data = json_decode($request->getBody()->getContents(), true);
-        
-        if (!isset($data['url']) || empty($data['url'])) {
-            $response->getBody()->write(json_encode(['error' => 'URL is required']));
-            return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+        $data = $request->getParsedBody();
+        if ($data === null) {
+            $data = json_decode($request->getBody()->getContents(), true) ?: [];
+        }
+        $url = $data['url'] ?? null;
+
+        if (empty($url)) {
+            return $this->json($response, ['error' => 'URL is required'], 400);
         }
 
         try {
-            $results = $this->urlAnalysisService->analyzeUrl($data['url']);
-            $payload = json_encode($results, JSON_UNESCAPED_UNICODE);
-            $response->getBody()->write($payload);
+            $result = $this->urlAnalysisService->analyzeUrl($url);
+            return $this->json($response, $result);
         } catch (\Throwable $e) {
-            $response->getBody()->write(json_encode(['error' => $e->getMessage()]));
-            return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+            return $this->json($response, ['error' => $e->getMessage()], 500);
         }
-
-        return $response->withHeader('Content-Type', 'application/json; charset=utf-8');
     }
+
 }
