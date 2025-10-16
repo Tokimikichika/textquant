@@ -24,6 +24,9 @@ class RandomController
         $text = $this->randomTextService->getRandomText();
 
         $payload = json_encode(['text' => $text], JSON_UNESCAPED_UNICODE);
+        if ($payload === false) {
+            $payload = '{"error":"Encoding error"}';
+        }
         $response->getBody()->write($payload);
 
         return $response->withHeader('Content-Type', 'application/json; charset=utf-8');
