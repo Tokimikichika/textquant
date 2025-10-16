@@ -15,6 +15,9 @@ class ResultFormatter
      * @param array $results Результаты анализа текста
      * @return string Форматированные результаты
      */
+    /**
+     * @param array<string,mixed> $results
+     */
     public function formatResults(array $results): string
     {
         $file = "File: " . $results['source'] . "\n";
@@ -46,6 +49,9 @@ class ResultFormatter
      *
      * @param array $topWords Топ слова
      * @return string Форматированные топ слова
+     */
+    /**
+     * @param array<int,array{word:string,count:int}> $topWords
      */
     private function formatTopWords(array $topWords): string
     {
