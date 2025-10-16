@@ -23,6 +23,9 @@ class RandomTextService
      * Валидирует ответ от API
      * @param array $data Данные ответа от API
      */
+    /**
+     * @param array<string,mixed> $data
+     */
     private function validateApiResponse(array $data): void
     {
         $this->validateTextFieldExists($data);
@@ -33,6 +36,9 @@ class RandomTextService
     /**
      * Проверяет наличие поля text в ответе
      * @param array $data Данные ответа от API
+     */
+    /**
+     * @param array<string,mixed> $data
      */
     private function validateTextFieldExists(array $data): void
     {
@@ -45,6 +51,9 @@ class RandomTextService
      * Проверяет тип поля text
      * @param array $data Данные ответа от API
      */
+    /**
+     * @param array<string,mixed> $data
+     */
     private function validateTextFieldType(array $data): void
     {
         if (!is_string($data['text'])) {
@@ -55,6 +64,9 @@ class RandomTextService
     /**
      * Проверяет, что поле text не пустое
      * @param array $data Данные ответа от API
+     */
+    /**
+     * @param array<string,mixed> $data
      */
     private function validateTextFieldNotEmpty(array $data): void
     {
@@ -109,6 +121,9 @@ class RandomTextService
      * Выполняет GET-запрос и декодирует JSON
      * @param string $url URL для запроса
      */
+    /**
+     * @return array<string,mixed>
+     */
     private function fetchJson(string $url): array
     {
         $this->validateUrl($url);
@@ -140,6 +155,9 @@ class RandomTextService
     /**
      * Парсит JSON ответ
      * @param string $raw JSON ответ
+     */
+    /**
+     * @return array<string,mixed>
      */
     private function parseJson(string $raw): array
     {
