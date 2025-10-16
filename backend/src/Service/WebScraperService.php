@@ -3,6 +3,8 @@
 namespace Tokimikichika\Find\Service;
 
 use Tokimikichika\HtmlSanitizer\HtmlSanitizer;
+use Tokimikichika\Find\Exception\HttpRequestException;
+use Tokimikichika\Find\Exception\InvalidUrlException;
 
 class WebScraperService
 {
@@ -21,12 +23,12 @@ class WebScraperService
     public function scrapeUrl(string $url): string
     {
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new \InvalidArgumentException('Invalid URL format');
+            throw new InvalidUrlException('Invalid URL format');
         }
 
         $parsedUrl = parse_url($url);
         if (!in_array($parsedUrl['scheme'] ?? '', ['http', 'https'])) {
-            throw new \InvalidArgumentException('Only HTTP/HTTPS URLs are supported');
+            throw new InvalidUrlException('Only HTTP/HTTPS URLs are supported');
         }
 
         $html = $this->fetchHtml($url);
@@ -53,7 +55,7 @@ class WebScraperService
 
         $html = @file_get_contents($url, false, $context);
         if ($html === false) {
-            throw new \RuntimeException('Failed to fetch URL: ' . $url);
+            throw new HttpRequestException('Failed to fetch URL: ' . $url);
         }
 
         return $html;
