@@ -32,6 +32,10 @@
         "test-coverage": "./vendor/bin/phpunit --coverage-html coverage",
         "analyze": "php bin/analyze.php",
         "cs-fix": "php-cs-fixer fix",
-        "cs-check": "php-cs-fixer fix --dry-run --diff"
+        "cs-check": "php-cs-fixer fix --dry-run --diff",
+        "phpstan": "php tools/phpstan.phar analyse -c phpstan.neon"
+    },
+    "config": {
+        "preferred-install": "source"
     }
 }
