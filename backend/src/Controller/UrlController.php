@@ -4,6 +4,7 @@ namespace Tokimikichika\Find\Controller;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Tokimikichika\Find\Controller\Base\AbstractController;
 use Tokimikichika\Find\Service\UrlAnalysisService;
 
 /**
@@ -13,7 +14,7 @@ use Tokimikichika\Find\Service\UrlAnalysisService;
  * в доменные сервисы. Исключения сервисов мапятся
  * на HTTP-коды в JSON-ответах.
  */
-class UrlController
+class UrlController extends AbstractController
 {
     /**
      * @param UrlAnalysisService $urlAnalysisService Сервис анализа содержимого страницы по URL
@@ -49,29 +50,5 @@ class UrlController
         } catch (\Throwable $e) {
             return $this->json($response, ['error' => $e->getMessage()], 500);
         }
-    }
-
-    /**
-     * Форматирует ответ в JSON.
-     *
-     * @param Response $response Базовый HTTP-ответ
-     * @param array    $data     Данные для сериализации в JSON
-     * @param int      $status   HTTP-статус ответа
-     *
-     * @return Response Ответ с заголовком `application/json; charset=utf-8`
-     */
-    /**
-     * @param array<string,mixed> $data
-     */
-    private function json(Response $response, array $data, int $status = 200): Response
-    {
-        $payload = json_encode($data, JSON_UNESCAPED_UNICODE);
-        if ($payload === false) {
-            $payload = '{"error":"Encoding error"}';
-        }
-        $response->getBody()->write($payload);
-        return $response
-            ->withStatus($status)
-            ->withHeader('Content-Type', 'application/json; charset=utf-8');
     }
 }
