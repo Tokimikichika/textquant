@@ -3,6 +3,9 @@
 namespace Tokimikichika\Find\Service;
 
 use Tokimikichika\Find\Enum\ApiConfig;
+use Tokimikichika\Find\Exception\HttpRequestException;
+use Tokimikichika\Find\Exception\InvalidParseException;
+use Tokimikichika\Find\Exception\InvalidUrlException;
 
 class RandomTextService
 {
@@ -82,12 +85,15 @@ class RandomTextService
     private function validateUrl(string $url): void
     {
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new \InvalidArgumentException('Invalid URL format');
+            throw new InvalidUrlException('Invalid URL format');
         }
 
         $parsedUrl = parse_url($url);
+        if ($parsedUrl === false) {
+            throw new InvalidParseException('Failed to parse URL');
+        }
         if (!in_array($parsedUrl['scheme'] ?? '', ['http', 'https'])) {
-            throw new \InvalidArgumentException('Only HTTP/HTTPS URLs are supported');
+            throw new InvalidUrlException('Only HTTP/HTTPS URLs are supported');
         }
     }
 
@@ -98,7 +104,7 @@ class RandomTextService
     private function validateHttpResponse(string $raw): void
     {
         if (empty($raw)) {
-            throw new \RuntimeException('Empty response from server');
+            throw new HttpRequestException('Empty response from server');
         }
     }
 
@@ -109,7 +115,7 @@ class RandomTextService
     private function validateJson(string $raw): void
     {
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \RuntimeException('JSON decode error: ' . json_last_error_msg());
+            throw new InvalidParseException('JSON decode error: ' . json_last_error_msg());
         }
     }
 
@@ -147,7 +153,7 @@ class RandomTextService
 
         $result = @file_get_contents($url, false, $context);
         if ($result === false) {
-            throw new \RuntimeException('HTTP request failed');
+            throw new HttpRequestException('HTTP request failed');
         }
         return $result;
     }
