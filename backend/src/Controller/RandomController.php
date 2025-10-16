@@ -15,6 +15,9 @@ class RandomController
 
     /**
      * Возвращает сгенерированный текст из внешнего сервиса
+     * @param Request $request HTTP-запрос
+     * @param Response $response HTTP-ответ
+     * @return Response JSON-ответ с результатами анализа или сообщением об ошибке
      */
     public function getText(Request $request, Response $response): Response
     {
