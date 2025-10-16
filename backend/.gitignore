@@ -33,3 +33,7 @@ Thumbs.db
 
 /build/
 /dist/
+
+# Tools (local binaries like phpstan.phar)
+/tools/
+!/tools/.keep

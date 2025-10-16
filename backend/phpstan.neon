@@ -1,0 +1,7 @@
+# PHPStan configuration for backend
+parameters:
+  level: 7
+  paths:
+    - src
+  reportUnmatchedIgnoredErrors: false
+  treatPhpDocTypesAsCertain: true
