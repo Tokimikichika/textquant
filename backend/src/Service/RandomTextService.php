@@ -8,6 +8,8 @@ class RandomTextService
 {
     /**
      * Возвращает случайный текст из внешнего источника
+     * 
+     * @return string Случайный текст
      */
     public function getRandomText(): string
     {
@@ -19,6 +21,7 @@ class RandomTextService
 
     /**
      * Валидирует ответ от API
+     * @param array $data Данные ответа от API
      */
     private function validateApiResponse(array $data): void
     {
@@ -29,6 +32,7 @@ class RandomTextService
 
     /**
      * Проверяет наличие поля text в ответе
+     * @param array $data Данные ответа от API
      */
     private function validateTextFieldExists(array $data): void
     {
@@ -39,6 +43,7 @@ class RandomTextService
 
     /**
      * Проверяет тип поля text
+     * @param array $data Данные ответа от API
      */
     private function validateTextFieldType(array $data): void
     {
@@ -49,6 +54,7 @@ class RandomTextService
 
     /**
      * Проверяет, что поле text не пустое
+     * @param array $data Данные ответа от API
      */
     private function validateTextFieldNotEmpty(array $data): void
     {
@@ -59,6 +65,7 @@ class RandomTextService
 
     /**
      * Валидирует URL
+     * @param string $url URL для валидации
      */
     private function validateUrl(string $url): void
     {
@@ -74,6 +81,7 @@ class RandomTextService
 
     /**
      * Валидирует HTTP ответ
+     * @param string $raw HTTP ответ
      */
     private function validateHttpResponse(string $raw): void
     {
@@ -88,6 +96,7 @@ class RandomTextService
 
     /**
      * Валидирует JSON
+     * @param string $raw JSON ответ
      */
     private function validateJson(string $raw): void
     {
@@ -98,6 +107,7 @@ class RandomTextService
 
     /**
      * Выполняет GET-запрос и декодирует JSON
+     * @param string $url URL для запроса
      */
     private function fetchJson(string $url): array
     {
@@ -109,6 +119,7 @@ class RandomTextService
 
     /**
      * Выполняет HTTP-запрос
+     * @param string $url URL для запроса
      */
     private function makeHttpRequest(string $url): string
     {
@@ -128,6 +139,7 @@ class RandomTextService
 
     /**
      * Парсит JSON ответ
+     * @param string $raw JSON ответ
      */
     private function parseJson(string $raw): array
     {
