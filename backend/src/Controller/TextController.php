@@ -15,6 +15,9 @@ class TextController
 
     /**
      * Анализирует текст
+     * @param Request $request HTTP-запрос
+     * @param Response $response HTTP-ответ
+     * @return Response JSON-ответ с результатами анализа или сообщением об ошибке
      */
     public function analyze(Request $request, Response $response): Response
     {
