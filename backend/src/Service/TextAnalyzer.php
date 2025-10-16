@@ -11,6 +11,9 @@ class TextAnalyzer
     /**
      * Анализ текста
      */
+    /**
+     * @return array<string,mixed>
+     */
     public function analyze(string $text, string $source = 'text'): array
     {
         return [
@@ -31,17 +34,20 @@ class TextAnalyzer
      * @param string $text Исходный текст для анализа
      * @return array Список слов
      */
+    /**
+     * @return list<string>
+     */
     private function getWords(string $text): array
     {
-        $words = preg_split('/[\s,;:]+/u', mb_strtolower($text, 'UTF-8'));
+        $words = preg_split('/[\s,;:]+/u', mb_strtolower($text, 'UTF-8')) ?: [];
         
         $cleanWords = array_map(function($word) {
             return preg_replace('/[^\p{L}\p{N}]/u', '', $word);
         }, $words);
         
-        return array_filter($cleanWords, function($cleanWord) {
+        return array_values(array_filter($cleanWords, function($cleanWord) {
             return !empty($cleanWord);
-        });
+        }));
     }
 
     /**
@@ -71,6 +77,9 @@ class TextAnalyzer
      * 
      * @param string $text Исходный текст для анализа
      * @return array Список предложений
+     */
+    /**
+     * @return list<string>
      */
     private function getSentences(string $text): array
     {
@@ -102,7 +111,7 @@ class TextAnalyzer
      */
     private function countParagraphs(string $text): int
     {
-        $paragraphs = preg_split('/\n\s*\n/', $text);
+        $paragraphs = preg_split('/\n\s*\n/', $text) ?: [];
         $paragraphs = array_filter($paragraphs, function ($paragraph) {
             return !empty(trim($paragraph));
         });
@@ -156,6 +165,9 @@ class TextAnalyzer
      * @param string $text Исходный текст для анализа
      * @param int $limit Максимальное количество слов
      * @return array Список самых частотных слов
+     */
+    /**
+     * @return array<int,array{word:string,count:int}>
      */
     private function getTopWords(string $text, int $limit = 5): array
     {
