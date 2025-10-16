@@ -60,9 +60,16 @@ class UrlController
      *
      * @return Response Ответ с заголовком `application/json; charset=utf-8`
      */
+    /**
+     * @param array<string,mixed> $data
+     */
     private function json(Response $response, array $data, int $status = 200): Response
     {
-        $response->getBody()->write(json_encode($data, JSON_UNESCAPED_UNICODE));
+        $payload = json_encode($data, JSON_UNESCAPED_UNICODE);
+        if ($payload === false) {
+            $payload = '{"error":"Encoding error"}';
+        }
+        $response->getBody()->write($payload);
         return $response
             ->withStatus($status)
             ->withHeader('Content-Type', 'application/json; charset=utf-8');
