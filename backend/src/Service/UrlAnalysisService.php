@@ -18,6 +18,9 @@ class UrlAnalysisService
      * @param string $url URL для анализа
      * @return array Результат анализа
      */
+    /**
+     * @return array<string,mixed>
+     */
     public function analyzeUrl(string $url): array
     {
         $this->validateUrl($url);
