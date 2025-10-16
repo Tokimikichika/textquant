@@ -2,6 +2,9 @@
 
 namespace Tokimikichika\Find\Service;
 
+/**
+ * Сервис для анализа содержимого веб-страницы по URL
+ */
 class UrlAnalysisService
 {
     public function __construct(
@@ -12,6 +15,8 @@ class UrlAnalysisService
 
     /**
      * Анализирует содержимое веб-страницы по URL
+     * @param string $url URL для анализа
+     * @return array Результат анализа
      */
     public function analyzeUrl(string $url): array
     {
@@ -22,6 +27,7 @@ class UrlAnalysisService
 
     /**
      * Валидирует URL
+     * @param string $url URL для валидации
      */
     private function validateUrl(string $url): void
     {
