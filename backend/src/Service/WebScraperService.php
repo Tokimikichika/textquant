@@ -15,6 +15,8 @@ class WebScraperService
 
     /**
      * Загружает содержимое веб-страницы и конвертирует в обычный текст
+     * @param string $url URL для загрузки
+     * @return string Содержимое веб-страницы в виде текста
      */
     public function scrapeUrl(string $url): string
     {
@@ -33,6 +35,8 @@ class WebScraperService
 
     /**
      * Загружает HTML содержимое страницы
+     * @param string $url URL для загрузки
+     * @return string HTML содержимое страницы
      */
     private function fetchHtml(string $url): string
     {
@@ -57,6 +61,8 @@ class WebScraperService
 
     /**
      * Извлекает текст из HTML, удаляя теги и нормализуя пробелы
+     * @param string $html HTML содержимое страницы
+     * @return string Текст из HTML
      */
     private function extractTextFromHtml(string $html): string
     {
