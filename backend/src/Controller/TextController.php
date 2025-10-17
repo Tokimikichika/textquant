@@ -22,7 +22,7 @@ class TextController extends AbstractController
      */
     public function analyze(Request $request, Response $response): Response
     {
-        $raw = $request->getBody()->getContents();
+        $raw  = $request->getBody()->getContents();
         $data = json_decode($raw, true);
 
         if (!is_array($data) || !isset($data['text']) || !is_string($data['text'])) {
@@ -30,6 +30,7 @@ class TextController extends AbstractController
         }
 
         $results = $this->analyzer->analyze($data['text'], 'text');
+
         return $this->json($response, $results);
     }
 }

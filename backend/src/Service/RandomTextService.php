@@ -11,14 +11,14 @@ class RandomTextService
 {
     /**
      * Возвращает случайный текст из внешнего источника
-     * 
+     *
      * @return string Случайный текст
      */
     public function getRandomText(): string
     {
         $data = $this->fetchJson(ApiConfig::FISH_TEXT_API_URL->value);
         $this->validateApiResponse($data);
-        
+
         return $data['text'];
     }
 
@@ -131,6 +131,7 @@ class RandomTextService
         $this->validateUrl($url);
         $raw = $this->makeHttpRequest($url);
         $this->validateHttpResponse($raw);
+
         return $this->parseJson($raw);
     }
 
@@ -142,19 +143,20 @@ class RandomTextService
     {
         $context = stream_context_create([
             'http' => [
-                'method' => 'GET',
+                'method'  => 'GET',
                 'timeout' => 5,
-                'header' => [
+                'header'  => [
                     'Accept: application/json',
-                    'User-Agent: TextAnalyzer/1.0'
-                ]
-            ]
+                    'User-Agent: TextAnalyzer/1.0',
+                ],
+            ],
         ]);
 
         $result = @file_get_contents($url, false, $context);
         if ($result === false) {
             throw new HttpRequestException('HTTP request failed');
         }
+
         return $result;
     }
 
@@ -169,14 +171,11 @@ class RandomTextService
     {
         $decoded = json_decode($raw, true);
         $this->validateJson($raw);
-        
+
         if (!is_array($decoded)) {
             throw new \RuntimeException('Response is not a JSON object');
         }
 
         return $decoded;
     }
-
 }
-
-

@@ -2,9 +2,9 @@
 
 namespace Tokimikichika\Find\Service;
 
-use Tokimikichika\HtmlSanitizer\HtmlSanitizer;
 use Tokimikichika\Find\Exception\HttpRequestException;
 use Tokimikichika\Find\Exception\InvalidUrlException;
+use Tokimikichika\HtmlSanitizer\HtmlSanitizer;
 
 class WebScraperService
 {
@@ -32,6 +32,7 @@ class WebScraperService
         }
 
         $html = $this->fetchHtml($url);
+
         return $this->extractTextFromHtml($html);
     }
 
@@ -44,13 +45,13 @@ class WebScraperService
     {
         $context = stream_context_create([
             'http' => [
-                'method' => 'GET',
+                'method'  => 'GET',
                 'timeout' => 10,
-                'header' => [
+                'header'  => [
                     'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-                ]
-            ]
+                    'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                ],
+            ],
         ]);
 
         $html = @file_get_contents($url, false, $context);

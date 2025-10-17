@@ -46,6 +46,7 @@ class UrlController extends AbstractController
 
         try {
             $result = $this->urlAnalysisService->analyzeUrl($url);
+
             return $this->json($response, $result);
         } catch (\Throwable $e) {
             return $this->json($response, ['error' => $e->getMessage()], 500);

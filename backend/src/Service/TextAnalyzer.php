@@ -7,7 +7,6 @@ namespace Tokimikichika\Find\Service;
  */
 class TextAnalyzer
 {
-
     /**
      * Анализ текста
      */
@@ -17,20 +16,20 @@ class TextAnalyzer
     public function analyze(string $text, string $source = 'text'): array
     {
         return [
-            'source' => $source,
-            'words' => $this->countWords($text),
-            'characters' => $this->countCharacters($text),
-            'sentences' => $this->countSentences($text),
-            'paragraphs' => $this->countParagraphs($text),
-            'avg_word_length' => $this->getAverageWordLength($text),
+            'source'              => $source,
+            'words'               => $this->countWords($text),
+            'characters'          => $this->countCharacters($text),
+            'sentences'           => $this->countSentences($text),
+            'paragraphs'          => $this->countParagraphs($text),
+            'avg_word_length'     => $this->getAverageWordLength($text),
             'avg_sentence_length' => $this->getAverageSentenceLength($text),
-            'top_words' => $this->getTopWords($text)
+            'top_words'           => $this->getTopWords($text),
         ];
     }
 
     /**
      * Извлекает список слов из текста
-     * 
+     *
      * @param string $text Исходный текст для анализа
      * @return array Список слов
      */
@@ -40,19 +39,15 @@ class TextAnalyzer
     private function getWords(string $text): array
     {
         $words = preg_split('/[\s,;:]+/u', mb_strtolower($text, 'UTF-8')) ?: [];
-        
-        $cleanWords = array_map(function($word) {
-            return preg_replace('/[^\p{L}\p{N}]/u', '', $word);
-        }, $words);
-        
-        return array_values(array_filter($cleanWords, function($cleanWord) {
-            return !empty($cleanWord);
-        }));
+
+        $cleanWords = array_map(fn ($word) => preg_replace('/[^\p{L}\p{N}]/u', '', $word), $words);
+
+        return array_values(array_filter($cleanWords, fn ($cleanWord) => !empty($cleanWord)));
     }
 
     /**
      * Подсчитывает количество слов в тексте
-     * 
+     *
      * @param string $text Исходный текст для анализа
      * @return int Количество слов
      */
@@ -63,7 +58,7 @@ class TextAnalyzer
 
     /**
      * Подсчитывает количество символов в тексте
-     * 
+     *
      * @param string $text Исходный текст для анализа
      * @return int Количество символов
      */
@@ -74,7 +69,7 @@ class TextAnalyzer
 
     /**
      * Извлекает список предложений из текста
-     * 
+     *
      * @param string $text Исходный текст для анализа
      * @return array Список предложений
      */
@@ -87,14 +82,14 @@ class TextAnalyzer
         if ($parts === false) {
             return [];
         }
-        $sentences = array_map(static fn($s) => trim((string)$s), $parts);
+        $sentences = array_map(static fn ($s) => trim((string)$s), $parts);
 
-        return array_values(array_filter($sentences, static fn($s) => $s !== ''));
+        return array_values(array_filter($sentences, static fn ($s) => $s !== ''));
     }
 
     /**
      * Подсчитывает количество предложений в тексте
-     * 
+     *
      * @param string $text Исходный текст для анализа
      * @return int Количество предложений
      */
@@ -105,23 +100,21 @@ class TextAnalyzer
 
     /**
      * Подсчитывает количество абзацев в тексте
-     * 
+     *
      * @param string $text Исходный текст для анализа
      * @return int Количество абзацев
      */
     private function countParagraphs(string $text): int
     {
         $paragraphs = preg_split('/\n\s*\n/', $text) ?: [];
-        $paragraphs = array_filter($paragraphs, function ($paragraph) {
-            return !empty(trim($paragraph));
-        });
+        $paragraphs = array_filter($paragraphs, fn ($paragraph) => !empty(trim($paragraph)));
 
         return count($paragraphs);
     }
 
     /**
      * Вычисляет среднюю длину слова в тексте
-     * 
+     *
      * @param string $text Исходный текст для анализа
      * @return float Средняя длина слова
      */
@@ -135,12 +128,13 @@ class TextAnalyzer
         foreach ($words as $word) {
             $totalLength += mb_strlen($word, 'UTF-8');
         }
+
         return round($totalLength / count($words), 1);
     }
 
     /**
      * Вычисляет среднюю длину предложения в тексте
-     * 
+     *
      * @param string $text Исходный текст для анализа
      * @return float Средняя длина предложения
      */
@@ -161,7 +155,7 @@ class TextAnalyzer
 
     /**
      * Извлекает список самых частотных слов в тексте
-     * 
+     *
      * @param string $text Исходный текст для анализа
      * @param int $limit Максимальное количество слов
      * @return array Список самых частотных слов
@@ -176,9 +170,9 @@ class TextAnalyzer
             return [];
         }
         $frequencies = array_count_values($words);
-        arsort($frequencies); 
+        arsort($frequencies);
         $limited = array_slice($frequencies, 0, $limit, true);
-        $result = [];
+        $result  = [];
         foreach ($limited as $word => $count) {
             $result[] = ['word' => $word, 'count' => $count];
         }
@@ -186,5 +180,3 @@ class TextAnalyzer
         return $result;
     }
 }
-
-

@@ -27,6 +27,7 @@ class UrlAnalysisService
     {
         $this->validateUrl($url);
         $text = $this->webScraperService->scrapeUrl($url);
+
         return $this->analyzer->analyze($text, 'url');
     }
 

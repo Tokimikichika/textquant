@@ -6,17 +6,17 @@ use Tokimikichika\Find\Service\TextAnalyzer;
 
 /**
  * Класс для тестирования TextAnalyzer
- * 
+ *
  * Тестирует все основные функции анализа текста
  */
 class TextAnalyzerTest
 {
-    private $testCount = 0;
+    private $testCount   = 0;
     private $passedTests = 0;
 
     /**
      * Создает TextAnalyzer с внедренными зависимостями
-     * 
+     *
      * @return TextAnalyzer
      */
     private function createTextAnalyzer(): TextAnalyzer
@@ -27,10 +27,10 @@ class TextAnalyzerTest
     /**
      * Запускает все тесты
      */
-    public function runAllTests()
+    public function runAllTests(): void
     {
         echo "Запуск тестов TextAnalyzer...\n\n";
-        
+
         $this->testWordCount();
         $this->testCharacterCount();
         $this->testSentenceCount();
@@ -39,10 +39,10 @@ class TextAnalyzerTest
         $this->testAverageSentenceLength();
         $this->testTopWords();
         $this->testEmptyText();
-        
-        echo "\n" . str_repeat("=", 50) . "\n";
+
+        echo "\n" . str_repeat('=', 50) . "\n";
         echo "Результаты тестов: {$this->passedTests}/{$this->testCount} прошли успешно\n";
-        
+
         if ($this->passedTests === $this->testCount) {
             echo "✅ Все тесты прошли успешно!\n";
         } else {
@@ -52,11 +52,11 @@ class TextAnalyzerTest
 
     /**
      * Проверяет условие и увеличивает счетчики тестов
-     * 
+     *
      * @param bool $condition Условие для проверки
      * @param string $message Сообщение о тесте
      */
-    private function assert($condition, $message)
+    private function assert($condition, $message): void
     {
         $this->testCount++;
         if ($condition) {
@@ -70,103 +70,103 @@ class TextAnalyzerTest
     /**
      * Тестирует подсчет слов в тексте
      */
-    private function testWordCount()
+    private function testWordCount(): void
     {
         $analyzer = $this->createTextAnalyzer();
-        
-        $result = $analyzer->analyze("Hello world test", "text");
-        $this->assert($result["words"] === 3, "Подсчет слов: 3 слова");
-        
-        $result2 = $analyzer->analyze("One two three four five", "text");
-        $this->assert($result2["words"] === 5, "Подсчет слов: 5 слов");
+
+        $result = $analyzer->analyze('Hello world test', 'text');
+        $this->assert($result['words'] === 3, 'Подсчет слов: 3 слова');
+
+        $result2 = $analyzer->analyze('One two three four five', 'text');
+        $this->assert($result2['words'] === 5, 'Подсчет слов: 5 слов');
     }
 
     /**
      * Тестирует подсчет символов в тексте
      */
-    private function testCharacterCount()
+    private function testCharacterCount(): void
     {
         $analyzer = $this->createTextAnalyzer();
-        
-        $result = $analyzer->analyze("Hello", "text");
-        $this->assert($result["characters"] === 5, "Подсчет символов: 5 символов");
-        
-        $result2 = $analyzer->analyze("Hello world", "text");
-        $this->assert($result2["characters"] === 11, "Подсчет символов: 11 символов");
+
+        $result = $analyzer->analyze('Hello', 'text');
+        $this->assert($result['characters'] === 5, 'Подсчет символов: 5 символов');
+
+        $result2 = $analyzer->analyze('Hello world', 'text');
+        $this->assert($result2['characters'] === 11, 'Подсчет символов: 11 символов');
     }
 
     /**
      * Тестирует подсчет предложений в тексте
      */
-    private function testSentenceCount()
+    private function testSentenceCount(): void
     {
         $analyzer = $this->createTextAnalyzer();
-        
-        $result = $analyzer->analyze("Hello world. This is a test!", "text");
-        $this->assert($result["sentences"] === 2, "Подсчет предложений: 2 предложения");
-        
-        $result2 = $analyzer->analyze("One. Two? Three!", "text");
-        $this->assert($result2["sentences"] === 3, "Подсчет предложений: 3 предложения");
+
+        $result = $analyzer->analyze('Hello world. This is a test!', 'text');
+        $this->assert($result['sentences'] === 2, 'Подсчет предложений: 2 предложения');
+
+        $result2 = $analyzer->analyze('One. Two? Three!', 'text');
+        $this->assert($result2['sentences'] === 3, 'Подсчет предложений: 3 предложения');
     }
 
     /**
      * Тестирует подсчет абзацев в тексте
      */
-    private function testParagraphCount()
+    private function testParagraphCount(): void
     {
         $analyzer = $this->createTextAnalyzer();
-        
-        $text = "First paragraph.\n\nSecond paragraph.";
-        $result = $analyzer->analyze($text, "text");
-        $this->assert($result["paragraphs"] === 2, "Подсчет абзацев: 2 абзаца");
+
+        $text   = "First paragraph.\n\nSecond paragraph.";
+        $result = $analyzer->analyze($text, 'text');
+        $this->assert($result['paragraphs'] === 2, 'Подсчет абзацев: 2 абзаца');
     }
 
     /**
      * Тестирует вычисление средней длины слова
      */
-    private function testAverageWordLength()
+    private function testAverageWordLength(): void
     {
         $analyzer = $this->createTextAnalyzer();
-        
-        $result = $analyzer->analyze("a bb ccc dddd", "text");
-        $this->assert($result["avg_word_length"] === 2.5, "Средняя длина слова: 2.5");
+
+        $result = $analyzer->analyze('a bb ccc dddd', 'text');
+        $this->assert($result['avg_word_length'] === 2.5, 'Средняя длина слова: 2.5');
     }
 
     /**
      * Тестирует вычисление средней длины предложения
      */
-    private function testAverageSentenceLength()
+    private function testAverageSentenceLength(): void
     {
         $analyzer = $this->createTextAnalyzer();
-        
-        $result = $analyzer->analyze("Hello world. This is a test sentence with more words.", "text");
-        $this->assert($result["avg_sentence_length"] === 5.0, "Средняя длина предложения: 5.0");
+
+        $result = $analyzer->analyze('Hello world. This is a test sentence with more words.', 'text');
+        $this->assert($result['avg_sentence_length'] === 5.0, 'Средняя длина предложения: 5.0');
     }
 
     /**
      * Тестирует анализ топ слов
      */
-    private function testTopWords()
+    private function testTopWords(): void
     {
         $analyzer = $this->createTextAnalyzer();
-        
-        $result = $analyzer->analyze("the the quick brown fox", "text");
-        $this->assert($result["top_words"][0]["word"] === "the", "Топ слово: 'the'");
-        $this->assert($result["top_words"][0]["count"] === 2, "Количество 'the': 2");
+
+        $result = $analyzer->analyze('the the quick brown fox', 'text');
+        $this->assert($result['top_words'][0]['word'] === 'the', "Топ слово: 'the'");
+        $this->assert($result['top_words'][0]['count'] === 2, "Количество 'the': 2");
     }
 
     /**
      * Тестирует обработку пустого текста
      */
-    private function testEmptyText()
+    private function testEmptyText(): void
     {
         $analyzer = $this->createTextAnalyzer();
-        
-        $result = $analyzer->analyze("", "text");
-        $this->assert($result["words"] === 0, "Пустой текст: 0 слов");
-        $this->assert($result["characters"] === 0, "Пустой текст: 0 символов");
-        $this->assert($result["sentences"] === 0, "Пустой текст: 0 предложений");
-        $this->assert($result["paragraphs"] === 0, "Пустой текст: 0 абзацев");
+
+        $result = $analyzer->analyze('', 'text');
+        $this->assert($result['words'] === 0, 'Пустой текст: 0 слов');
+        $this->assert($result['characters'] === 0, 'Пустой текст: 0 символов');
+        $this->assert($result['sentences'] === 0, 'Пустой текст: 0 предложений');
+        $this->assert($result['paragraphs'] === 0, 'Пустой текст: 0 абзацев');
     }
 }
 

@@ -38,5 +38,3 @@ class TextReader
         return file_exists($filePath) && is_file($filePath) && is_readable($filePath);
     }
 }
-
-

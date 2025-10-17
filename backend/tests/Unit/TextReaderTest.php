@@ -62,4 +62,3 @@ class TextReaderTest extends TestCase
         $this->textReader->readFromFile(__DIR__);
     }
 }
-

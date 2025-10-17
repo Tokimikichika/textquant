@@ -14,9 +14,9 @@ class UrlAnalysisServiceTest extends TestCase
 
     protected function setUp(): void
     {
-        $analyzer = $this->createMock(\Tokimikichika\Find\Service\TextAnalyzer::class);
+        $analyzer   = $this->createMock(\Tokimikichika\Find\Service\TextAnalyzer::class);
         $webScraper = $this->createMock(\Tokimikichika\Find\Service\WebScraperService::class);
-        
+
         $this->urlAnalysisService = new UrlAnalysisService($analyzer, $webScraper);
     }
 
@@ -28,7 +28,7 @@ class UrlAnalysisServiceTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('URL is required');
-        
+
         $this->urlAnalysisService->analyzeUrl('');
     }
 
@@ -40,7 +40,7 @@ class UrlAnalysisServiceTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('URL is required');
-        
+
         $this->urlAnalysisService->analyzeUrl('   ');
     }
 
@@ -50,19 +50,19 @@ class UrlAnalysisServiceTest extends TestCase
      */
     public function testAnalyzeUrlCallsWebScraperService(): void
     {
-        $analyzer = $this->createMock(\Tokimikichika\Find\Service\TextAnalyzer::class);
+        $analyzer   = $this->createMock(\Tokimikichika\Find\Service\TextAnalyzer::class);
         $webScraper = $this->createMock(\Tokimikichika\Find\Service\WebScraperService::class);
-        
+
         $webScraper->expects($this->once())
             ->method('scrapeUrl')
             ->with('https://example.com')
             ->willReturn('Test content for analysis');
-            
+
         $analyzer->expects($this->once())
             ->method('analyze')
             ->with('Test content for analysis', 'url')
             ->willReturn(['word_count' => 4]);
-        
+
         $urlAnalysisService = new UrlAnalysisService($analyzer, $webScraper);
         $urlAnalysisService->analyzeUrl('https://example.com');
     }
@@ -73,16 +73,16 @@ class UrlAnalysisServiceTest extends TestCase
      */
     public function testAnalyzeUrlCallsTextAnalyzer(): void
     {
-        $analyzer = $this->createMock(\Tokimikichika\Find\Service\TextAnalyzer::class);
+        $analyzer   = $this->createMock(\Tokimikichika\Find\Service\TextAnalyzer::class);
         $webScraper = $this->createMock(\Tokimikichika\Find\Service\WebScraperService::class);
-        
+
         $webScraper->method('scrapeUrl')->willReturn('Test content');
-        
+
         $analyzer->expects($this->once())
             ->method('analyze')
             ->with('Test content', 'url')
             ->willReturn(['word_count' => 4]);
-        
+
         $urlAnalysisService = new UrlAnalysisService($analyzer, $webScraper);
         $urlAnalysisService->analyzeUrl('https://example.com');
     }
@@ -93,15 +93,15 @@ class UrlAnalysisServiceTest extends TestCase
      */
     public function testAnalyzeUrlReturnsArray(): void
     {
-        $analyzer = $this->createMock(\Tokimikichika\Find\Service\TextAnalyzer::class);
+        $analyzer   = $this->createMock(\Tokimikichika\Find\Service\TextAnalyzer::class);
         $webScraper = $this->createMock(\Tokimikichika\Find\Service\WebScraperService::class);
-        
+
         $webScraper->method('scrapeUrl')->willReturn('Test content');
         $analyzer->method('analyze')->willReturn(['word_count' => 4]);
-        
+
         $urlAnalysisService = new UrlAnalysisService($analyzer, $webScraper);
-        $result = $urlAnalysisService->analyzeUrl('https://example.com');
-        
+        $result             = $urlAnalysisService->analyzeUrl('https://example.com');
+
         $this->assertIsArray($result);
     }
 
@@ -111,24 +111,24 @@ class UrlAnalysisServiceTest extends TestCase
      */
     public function testAnalyzeUrlReturnsCorrectStructure(): void
     {
-        $analyzer = $this->createMock(\Tokimikichika\Find\Service\TextAnalyzer::class);
+        $analyzer   = $this->createMock(\Tokimikichika\Find\Service\TextAnalyzer::class);
         $webScraper = $this->createMock(\Tokimikichika\Find\Service\WebScraperService::class);
-        
+
         $webScraper->method('scrapeUrl')->willReturn('Test content');
         $analyzer->method('analyze')->willReturn([
-            'word_count' => 4,
-            'character_count' => 20,
-            'sentence_count' => 1,
-            'paragraph_count' => 1,
-            'avg_word_length' => 5.0,
+            'word_count'          => 4,
+            'character_count'     => 20,
+            'sentence_count'      => 1,
+            'paragraph_count'     => 1,
+            'avg_word_length'     => 5.0,
             'avg_sentence_length' => 4.0,
-            'top_words' => ['test', 'content'],
-            'source' => 'url'
+            'top_words'           => ['test', 'content'],
+            'source'              => 'url',
         ]);
-        
+
         $urlAnalysisService = new UrlAnalysisService($analyzer, $webScraper);
-        $result = $urlAnalysisService->analyzeUrl('https://example.com');
-        
+        $result             = $urlAnalysisService->analyzeUrl('https://example.com');
+
         $this->assertArrayHasKey('word_count', $result);
         $this->assertArrayHasKey('character_count', $result);
         $this->assertArrayHasKey('sentence_count', $result);

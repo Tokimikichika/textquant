@@ -8,5 +8,3 @@ namespace Tokimikichika\Find\Exception;
 class InvalidUrlException extends AppException
 {
 }
-
-

@@ -21,10 +21,9 @@ abstract class AbstractController
             $payload = '{"error":"Encoding error"}';
         }
         $response->getBody()->write($payload);
+
         return $response
             ->withStatus($status)
             ->withHeader('Content-Type', 'application/json; charset=utf-8');
     }
 }
-
-

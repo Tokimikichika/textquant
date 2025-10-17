@@ -5,7 +5,7 @@ namespace Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Tokimikichika\Find\Service\RandomTextService;
 
-/** 
+/**
  * Тестирует RandomTextService
  */
 class RandomTextServiceTest extends TestCase
@@ -46,7 +46,7 @@ class RandomTextServiceTest extends TestCase
     {
         $result1 = $this->randomTextService->getRandomText();
         $result2 = $this->randomTextService->getRandomText();
-        
+
         $this->assertIsString($result1);
         $this->assertIsString($result2);
         $this->assertNotEmpty($result1);

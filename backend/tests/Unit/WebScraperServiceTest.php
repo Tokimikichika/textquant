@@ -25,7 +25,7 @@ class WebScraperServiceTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid URL format');
-        
+
         $this->webScraperService->scrapeUrl('invalid-url');
     }
 
@@ -37,7 +37,7 @@ class WebScraperServiceTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Only HTTP/HTTPS URLs are supported');
-        
+
         $this->webScraperService->scrapeUrl('ftp://example.com');
     }
 
