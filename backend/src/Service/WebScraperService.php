@@ -14,7 +14,7 @@ class WebScraperService
     public function __construct()
     {
         $this->htmlSanitizer = HtmlSanitizer::create();
-        $this->htmlParser = new HtmlParser();
+        $this->htmlParser    = new HtmlParser();
     }
 
     /**
@@ -37,13 +37,6 @@ class WebScraperService
 
         return $this->extractTextFromHtml($html);
     }
-
-    /**
-     * Загружает HTML содержимое страницы
-     * @param string $url URL для загрузки
-     * @return string HTML содержимое страницы
-     */
-    // fetchHtml заменён использованием HtmlParser::fetch
 
     /**
      * Извлекает текст из HTML, удаляя теги и нормализуя пробелы
