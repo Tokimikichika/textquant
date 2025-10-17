@@ -14,7 +14,11 @@
         "php": ">=8.0",
         "slim/slim": "4.12",
         "slim/psr7": "1.6",
-        "tokimikichika/htmlsanitizer": "^0.1.0"
+        "tokimikichika/htmlsanitizer": "^0.1.0",
+        "tokimikichika/file-reader": "*",
+        "tokimikichika/html-parser": "*",
+        "tokimikichika/random-text": "*",
+        "tokimikichika/text-analysis": "*"
     },
     "autoload": {
         "psr-4": {
