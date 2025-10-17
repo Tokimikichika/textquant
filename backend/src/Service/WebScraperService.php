@@ -2,17 +2,19 @@
 
 namespace Tokimikichika\Find\Service;
 
-use Tokimikichika\Find\Exception\HttpRequestException;
 use Tokimikichika\Find\Exception\InvalidUrlException;
+use Tokimikichika\HtmlParser\HtmlParser;
 use Tokimikichika\HtmlSanitizer\HtmlSanitizer;
 
 class WebScraperService
 {
     private HtmlSanitizer $htmlSanitizer;
+    private HtmlParser $htmlParser;
 
     public function __construct()
     {
         $this->htmlSanitizer = HtmlSanitizer::create();
+        $this->htmlParser = new HtmlParser();
     }
 
     /**
@@ -31,7 +33,7 @@ class WebScraperService
             throw new InvalidUrlException('Only HTTP/HTTPS URLs are supported');
         }
 
-        $html = $this->fetchHtml($url);
+        $html = $this->htmlParser->fetch($url);
 
         return $this->extractTextFromHtml($html);
     }
@@ -41,26 +43,7 @@ class WebScraperService
      * @param string $url URL для загрузки
      * @return string HTML содержимое страницы
      */
-    private function fetchHtml(string $url): string
-    {
-        $context = stream_context_create([
-            'http' => [
-                'method'  => 'GET',
-                'timeout' => 10,
-                'header'  => [
-                    'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-                ],
-            ],
-        ]);
-
-        $html = @file_get_contents($url, false, $context);
-        if ($html === false) {
-            throw new HttpRequestException('Failed to fetch URL: ' . $url);
-        }
-
-        return $html;
-    }
+    // fetchHtml заменён использованием HtmlParser::fetch
 
     /**
      * Извлекает текст из HTML, удаляя теги и нормализуя пробелы
