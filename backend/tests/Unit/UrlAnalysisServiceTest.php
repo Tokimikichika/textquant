@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use Tokimikichika\Find\Exception\InvalidUrlException;
 use Tokimikichika\Find\Service\UrlAnalysisService;
 
 /**
@@ -26,7 +27,7 @@ class UrlAnalysisServiceTest extends TestCase
      */
     public function testAnalyzeUrlWithEmptyUrl(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidUrlException::class);
         $this->expectExceptionMessage('URL is required');
 
         $this->urlAnalysisService->analyzeUrl('');
@@ -38,7 +39,7 @@ class UrlAnalysisServiceTest extends TestCase
      */
     public function testAnalyzeUrlWithWhitespaceUrl(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidUrlException::class);
         $this->expectExceptionMessage('URL is required');
 
         $this->urlAnalysisService->analyzeUrl('   ');
