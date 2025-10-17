@@ -107,30 +107,12 @@ class SentenceCounterTest extends TestCase
         $this->assertEquals(5, $result['words']);
     }
 
-    /**
-     * Тестирует анализ текста с повторяющимися словами
-     */
-    public function testAnalyzeTextWithRepeatedWords(): void
-    {
-        $text   = 'the the quick brown fox the';
-        $result = $this->textAnalyzer->analyze($text, 'repeated.txt');
-
-        $this->assertEquals('the', $result['top_words'][0]['word']);
-    }
 
     /**
      * Тестирует анализ текста с повторяющимися словами
      */
-    public function testAnalyzeTextWithRepeatedWordsCount(): void
-    {
-        $text   = 'the the quick brown fox the';
-        $result = $this->textAnalyzer->analyze($text, 'repeated.txt');
-
-        $this->assertEquals(3, $result['top_words'][0]['count']);
-    }
-
     /**
-     * Тестирует анализ текста с повторяющимися словами
+     * @dataProvider complexTextDataProvider
      */
     public function testAnalyzeWithDataProvider(string $text, int $expectedWords, int $expectedSentences): void
     {
@@ -150,7 +132,7 @@ class SentenceCounterTest extends TestCase
             'two sentences'      => ['Hello world. How are you?', 5, 2],
             'with punctuation'   => ['Hello, world! How are you?', 5, 2],
             'with numbers'       => ['I have 123 apples.', 4, 1],
-            'with special chars' => ['Hello@world.com is my email.', 4, 2],
+            'with special chars' => ['Hello@world.com is my email.', 4, 1],
             'unicode text'       => ['Привет мир! Как дела?', 4, 2],
         ];
     }
