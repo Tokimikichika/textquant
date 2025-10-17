@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use Tokimikichika\Find\Exception\InvalidUrlException;
 use Tokimikichika\Find\Service\WebScraperService;
 
 /**
@@ -23,7 +24,7 @@ class WebScraperServiceTest extends TestCase
      */
     public function testScrapeUrlWithInvalidUrl(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidUrlException::class);
         $this->expectExceptionMessage('Invalid URL format');
 
         $this->webScraperService->scrapeUrl('invalid-url');
@@ -35,7 +36,7 @@ class WebScraperServiceTest extends TestCase
      */
     public function testScrapeUrlWithNonHttpUrl(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidUrlException::class);
         $this->expectExceptionMessage('Only HTTP/HTTPS URLs are supported');
 
         $this->webScraperService->scrapeUrl('ftp://example.com');
