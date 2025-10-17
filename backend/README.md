@@ -131,13 +131,15 @@ composer test-coverage
 - `UrlController` - обработка анализа URL
 - `RandomController` - генерация случайного текста
 
-### Перечисления
-- `ApiConfig` - конфигурация API
 
 ## Зависимости
-- `tokimikichika/htmlsanitizer` - очистка HTML контента
 - `slim/slim` - веб-фреймворк
 - `slim/psr7` - PSR-7 HTTP сообщения
+- `tokimikichika/htmlsanitizer` - очистка HTML контента
+- `tokimikichika/text-analysis` - анализ текста
+- `tokimikichika/file-reader` - чтение файлов
+- `tokimikichika/html-parser` - загрузка HTML/парсинг
+- `tokimikichika/random-text` - генерация текста
 
 ## Лицензия
 MIT
