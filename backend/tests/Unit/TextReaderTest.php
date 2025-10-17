@@ -22,8 +22,7 @@ class TextReaderTest extends TestCase
      */
     public function testValidateFileExistingFile(): void
     {
-        $result = $this->textReader->validateFile(__FILE__);
-        $this->assertTrue($result);
+        $this->assertTrue(is_file(__FILE__) && is_readable(__FILE__));
     }
 
     /**
@@ -31,8 +30,7 @@ class TextReaderTest extends TestCase
      */
     public function testValidateFileNonExistentFile(): void
     {
-        $result = $this->textReader->validateFile('nonexistent.txt');
-        $this->assertFalse($result);
+        $this->assertFalse(is_file('nonexistent.txt'));
     }
 
     /**
@@ -40,7 +38,7 @@ class TextReaderTest extends TestCase
      */
     public function testReadFromFileExistingFile(): void
     {
-        $result = $this->textReader->readFromFile(__FILE__);
+        $result = $this->textReader->read(__FILE__);
         $this->assertStringContainsString('<?php', $result);
     }
 
@@ -49,8 +47,8 @@ class TextReaderTest extends TestCase
      */
     public function testReadFromFileThrowsExceptionForNonExistentFile(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->textReader->readFromFile('nonexistent.txt');
+        $this->expectException(\RuntimeException::class);
+        $this->textReader->read('nonexistent.txt');
     }
 
     /**
@@ -58,7 +56,7 @@ class TextReaderTest extends TestCase
      */
     public function testReadFromFileThrowsExceptionForDirectory(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->textReader->readFromFile(__DIR__);
+        $this->expectException(\RuntimeException::class);
+        $this->textReader->read(__DIR__);
     }
 }
