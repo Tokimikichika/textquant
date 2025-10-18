@@ -38,7 +38,7 @@ class UrlAnalysisService
     private function validateUrl(string $url): void
     {
         if (empty(trim($url))) {
-            throw new InvalidUrlException('URL is required');
+            throw new InvalidUrlException($url);
         }
     }
 }
