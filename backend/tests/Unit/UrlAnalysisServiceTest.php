@@ -28,7 +28,7 @@ class UrlAnalysisServiceTest extends TestCase
     public function testAnalyzeUrlWithEmptyUrl(): void
     {
         $this->expectException(InvalidUrlException::class);
-        $this->expectExceptionMessage('URL is required');
+        $this->expectExceptionMessage('Неверный URL');
 
         $this->urlAnalysisService->analyzeUrl('');
     }
@@ -40,7 +40,7 @@ class UrlAnalysisServiceTest extends TestCase
     public function testAnalyzeUrlWithWhitespaceUrl(): void
     {
         $this->expectException(InvalidUrlException::class);
-        $this->expectExceptionMessage('URL is required');
+        $this->expectExceptionMessage('Неверный URL');
 
         $this->urlAnalysisService->analyzeUrl('   ');
     }

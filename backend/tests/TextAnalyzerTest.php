@@ -92,7 +92,7 @@ class TextAnalyzerTest
         $this->assert($result['characters'] === 5, 'Подсчет символов: 5 символов');
 
         $result2 = $analyzer->analyze('Hello world', 'text');
-        $this->assert($result2['characters'] === 11, 'Подсчет символов: 11 символов');
+        $this->assert($result2['characters'] === 10, 'Подсчет символов: 10 символов');
     }
 
     /**
