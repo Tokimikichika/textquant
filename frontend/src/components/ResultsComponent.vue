@@ -93,6 +93,8 @@ export default {
 .section-subtitle {
   margin: 0 0 6px;
   font-weight: 600;
+  font-size: 16px;
+  color: #0f172a;
 }
 
 
