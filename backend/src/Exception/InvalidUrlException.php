@@ -7,4 +7,9 @@ namespace Tokimikichika\Find\Exception;
  */
 class InvalidUrlException extends AppException
 {
+    public function __construct(string $url = '', int $code = 0, ?\Throwable $previous = null)
+    {
+        $message = $url ? "Неверный URL: {$url}" : 'Неверный URL';
+        parent::__construct($message, $code, $previous);
+    }
 }
