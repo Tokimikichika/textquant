@@ -1,0 +1,27 @@
+# Dependencies
+backend/vendor/
+backend/composer.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Coverage reports
+backend/coverage/
+backend/coverage.xml
+
+# Cache
+backend/.php-cs-fixer.cache
+
+# Temporary files
+*.tmp
+*.temp

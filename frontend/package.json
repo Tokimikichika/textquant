@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "echo 'No linting configured'",
+    "type-check": "echo 'No TypeScript configured'",
+    "test:unit": "echo 'No tests configured'"
   },
   "dependencies": {
     "vue": "^3.5.22"
