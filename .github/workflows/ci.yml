@@ -140,8 +140,7 @@ jobs:
     
     - name: Build nginx Docker image
       run: |
-        cd nginx
-        docker build -t nginx-test .
+        docker build -f nginx/Dockerfile -t nginx-test .
     
     - name: Test Docker Compose
       run: |
