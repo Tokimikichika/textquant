@@ -25,12 +25,12 @@ class WebScraperService
     public function scrapeUrl(string $url): string
     {
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new InvalidUrlException('Invalid URL format');
+            throw new InvalidUrlException($url);
         }
 
         $parsedUrl = parse_url($url);
         if (!in_array($parsedUrl['scheme'] ?? '', ['http', 'https'])) {
-            throw new InvalidUrlException('Only HTTP/HTTPS URLs are supported');
+            throw new InvalidUrlException($url);
         }
 
         $html = $this->htmlParser->fetch($url);
