@@ -21,6 +21,9 @@ class TextAnalyzer extends ExternalTextAnalyzer
             'characters' => $this->countCharacters($text, true),
             'sentences'  => $this->countSentences($text),
             'paragraphs' => $this->countParagraphs($text),
+            'avg_word_length'    => $this->calculateAverageWordLength($text),
+            'avg_sentence_length' => $this->calculateAverageSentenceLength($text),
+            'top_words'          => $this->formatTopWords($this->getTopWords($text)),
         ];
     }
 }
